@@ -1,0 +1,26 @@
+num_hardware: 20
+num_processes: 10
+num_uniforms: ???
+choices: ???
+data_attrs:
+  - actuator_acc0
+  - body_inertia
+  - body_invweight0
+  - body_ipos
+  - body_iquat
+  - body_mass
+  - body_pos
+  - body_quat
+  - body_subtreemass
+  - cam_poscom0
+  - dof_M0
+  - dof_invweight0
+  - geom_pos
+  - geom_quat
+  - geom_size
+  - jnt_range
+  - site_pos
+output_path: ???
+robogen_from_params:
+  _partial_: true
+  _target_: t2.robogen.umi_on_legs_plus_plus.umi_on_legs_plus_plus_from_params

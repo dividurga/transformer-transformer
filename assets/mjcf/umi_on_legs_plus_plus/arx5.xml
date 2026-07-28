@@ -1,0 +1,151 @@
+<mujoco model="arx5">
+    <include file="defaults.xml" />
+    <include file="arx5_contact_exclusion.xml" />
+
+    <worldbody>
+        <body name="arx5_base_link" pos="0.0 0 0.094" euler="0 0 0">
+            <geom name="link1_motor" class="small_motor" pos="0 0 -0.015"
+            />
+            <joint name="joint1" axis="0 0 1" range="-3.141592653589793 3.141592653589793"
+            />
+            <body name="link2" pos="0.02 0 0.0402">
+                <geom name="link2_motor_1" class="small_motor" pos="-0.02 0 0"
+                    euler="1.57079632679 0 0" />
+                <joint name="joint2" axis="0 1 0" range="0 3.66519" pos="-0.02 0 0" />
+                <geom class="small_geom" name="link2_geom_1"
+                    fromto="-0.02 0.012 -0.02 -0.264 0.012 -0.02"
+                />
+                <geom class="small_geom" name="link2_geom_2"
+                    fromto="-0.02 -0.012 -0.02 -0.264 -0.012 -0.02"
+                />
+                <geom class="small_geom" name="link2_geom_3"
+                    fromto="-0.02 0.012 0.02 -0.264 0.012 0.02"
+                />
+                <geom class="small_geom" name="link2_geom_4"
+                    fromto="-0.02 -0.012 0.02 -0.264 -0.012 0.02"
+                />
+                <body name="link3" pos="-0.264 0 0" euler="-3.1416 0 0">
+                    <geom name="link3_motor_1" class="small_motor" pos="0.0 0 0"
+                        euler="1.57079632679 0 0" />
+                    <joint name="joint3" axis="0 1 0" range="0 3.141592653589793"
+                    />
+                    <geom name="link4_motor_1" class="small_motor"
+                        pos="0.245 0 -0.056"
+                        euler="1.57079632679 0 0" />
+                    <geom class="small_geom" name="link3_geom_1"
+                        fromto="0.005 -0.012 -0.036 0.245 -0.012 -0.036"
+                    />
+                    <geom class="small_geom" name="link3_geom_2"
+                        fromto="0.005 0.012 -0.036 0.245 0.012 -0.036"
+                    />
+                    <geom class="small_geom" name="link3_geom_3"
+                        fromto="0.04 -0.012 -0.076 0.245 -0.012 -0.076"
+                    />
+                    <geom class="small_geom" name="link3_geom_4"
+                        fromto="0.04 0.012 -0.076 0.245 0.012 -0.076"
+                    />
+                    <geom class="small_geom" name="link3_geom_5"
+                        fromto="0.04 -0.012 -0.076 -0.017 -0.012 -0.01"
+                    />
+                    <geom class="small_geom" name="link3_geom_6"
+                        fromto="0.04 0.012 -0.076 -0.017 0.012 -0.01"
+                    />
+
+
+                    <body name="link4" pos="0.245 0 -0.056">
+                        <joint name="joint4" axis="0 1 0"
+                            range="-1.57079632679 1.57079632679" />
+                        <geom name="link5_motor_1" class="small_motor"
+                            pos="0.06575 0.0 -0.06"
+                            euler="0.0 0 0" />
+                        <body name="link5" pos="0.06575 -0.001 -0.0825">
+                            <geom name="link6_motor_1" class="small_motor"
+                                pos="0.00 0 0.0825"
+                                euler="0.0 1.57079632679 0" />
+                            <joint name="joint5" axis="0 0 1"
+                                range="-1.57079632679 1.57079632679" />
+                            <body name="link6" pos="0.02845 0 0.0825" euler="-3.1416 0 0">
+                                <geom name="gripper_motor_1" class="small_motor"
+                                    pos="0.02 0 0.0"
+                                    euler="0.0 1.57079632679 0" />
+                                <site name="end_effector" pos="0.22 0 0"
+                                    euler="0 1.57079632679 -1.57079632679"
+                                    group="1"
+                                />
+                                <joint name="joint6" axis="1 0 0"
+                                    range="-1.57079632679 1.57079632679" />
+                                <geom class="small_geom" type="box" size="0.01 0.09 0.008"
+                                    pos="0.06 0.00 0.00"
+                                    quat="1 0 1 0"
+                                />
+                                <body name="gopro"
+                                    euler="0 1.57079632679 -1.57079632679"
+                                    pos="0.018 -0.02 0.045">
+                                    <geom class="camera" size="0.038 0.03 0.013"
+                                        pos="0.00 -0.029 0.002"
+                                        type="box" />
+                                </body>
+                                <body name="left_finger" pos="0.072 0.0 0.0"
+                                    euler="3.14159265359 1.57079632679 0">
+                                    <geom name="left_finger_geom" class="TPU gripper" />
+                                </body>
+                                <body name="right_finger" pos="0.072 0.0 0.0"
+                                    euler="0 1.57079632679 0.0">
+                                    <geom name="right_finger_geom" class="TPU gripper" />
+                                </body>
+                                <geom name="gripper_collider_1" contype="0" conaffinity="0"
+                                    group="5"
+                                    type="capsule" size="0.04" fromto="0.0 0.0 0.0 0.2 0.0 0"
+                                    mass="0" />
+                                <geom name="gripper_collider_2" contype="0" conaffinity="0"
+                                    group="5"
+                                    type="capsule" size="0.01" fromto="0.06 -0.09 0.0 0.06 0.09 0."
+                                    mass="0" />
+                            </body>
+                        </body>
+                    </body>
+                </body>
+            </body>
+        </body>
+    </worldbody>
+
+    <keyframe>
+        <key name="home"
+            qpos="0.0 0.3 0.5 0.0 0.0 0.0"
+            ctrl="0.0 0.3 0.5 0.0 0.0 0.0"
+        />
+        <key name="penalty_default_qpos_weight" qpos="0.5 0.0 0.0 0.0 0.5 0.0" />
+    </keyframe>
+    <actuator>
+        <position name="joint1" joint="joint1" kp="20" kv="0.4"
+            forcerange="-45.43 45.43"
+            ctrlrange="-3.141592653589793 3.141592653589793" />
+        <position name="joint2" joint="joint2" kp="20" kv="0.4"
+            forcerange="-45.43 45.43"
+            ctrlrange="0 3.66519" />
+        <position name="joint3" joint="joint3" kp="20" kv="0.4"
+            forcerange="-45.43 45.43"
+            ctrlrange="0 3.141592653589793" />
+        <position name="joint4" joint="joint4" kp="5" kv="0.05"
+            forcerange="-45.43 45.43"
+            ctrlrange="-1.57079632679 1.57079632679" />
+        <position name="joint5" joint="joint5" kp="5" kv="0.05"
+            forcerange="-45.43 45.43"
+            ctrlrange="-1.57079632679 1.57079632679" />
+        <position name="joint6" joint="joint6" kp="5" kv="0.05"
+            forcerange="-45.43 45.43"
+            ctrlrange="-1.57079632679 1.57079632679" />
+    </actuator>
+
+    <custom>
+        <numeric name="link3\body\pos\0\range\y" size='2' data='-0.1 -0.4' />
+
+        <text name="link2_length"
+            data="link3\body\pos\0\range\y;link2_geom_1\geom\fromto\3\range\y;link2_geom_2\geom\fromto\3\range\y;link2_geom_3\geom\fromto\3\range\y;link2_geom_4\geom\fromto\3\range\y" />
+
+        <numeric name="link4\body\pos\0\range\y" size='2' data='0.1 0.4' />
+
+        <text name="link3_length"
+            data="link4\body\pos\0\range\y;link3_geom_1\geom\fromto\3\range\y;link3_geom_2\geom\fromto\3\range\y;link3_geom_3\geom\fromto\3\range\y;link3_geom_4\geom\fromto\3\range\y;link4_motor_1\geom\pos\0\range\y" />
+    </custom>
+</mujoco>

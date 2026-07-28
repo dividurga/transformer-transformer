@@ -1,0 +1,135 @@
+defaults:
+  - dataset@datasets.clean.dataset: base
+  # - evals/hardware_gen: variable_viperx
+  - _self_
+
+hardware_dataset_path: ???
+
+hardware_pos_seq_lens: &hardware_pos_seq_lens
+  dyna_joint:
+    - ${eval:"int(${seq_len.dyna_joint}//2)"}
+    - 0
+    - 1
+    - 2
+  fixed_joint:
+    - ${eval:"int(${seq_len.fixed_joint}//2)"}
+    - 0
+    - 1
+    - 2
+  link:
+    - ${seq_len.link}
+    - 0
+    - 1
+    - 1
+  actuator:
+    - ${seq_len.actuator}
+    - 0
+    - 1
+    - 1
+  # all obs are scaled by rollout_steps
+  track_link_obs/track_link:
+    - ${seq_len.track_link}
+    - 0
+    - ${seq_len.rollout_steps}
+    - 1
+  dyna_joint_obs/dyna_joint:
+    - ${seq_len.dyna_joint_obs}
+    - 0
+    - ${seq_len.rollout_steps}
+    - 1
+  free_link_obs/free_link:
+    - ${seq_len.free_link_obs}
+    - 0
+    - ${seq_len.rollout_steps}
+    - 1
+  actuator_obs/actuator:
+    - ${seq_len.actuator_obs}
+    - 0
+    - ${seq_len.rollout_steps}
+    - 1
+  ctrl/actuator:
+    - ${seq_len.actuator}
+    - 0
+    - ${seq_len.rollout_steps}
+    - 1
+  target_pose/track_link:
+    - ${seq_len.track_link}
+    - 0
+    - ${seq_len.rollout_steps}
+    - 1
+datasets:
+  clean:
+    dataset:
+      path: ${hardware_dataset_path}
+      group_seq_lens: ${seq_len}
+      rollout_groups:
+        - ctrl
+        - track_link_obs
+        - dyna_joint_obs
+        # - free_link_obs <-- fixed arms don't have free link obs
+        - actuator_obs
+        - target_pose
+    tasks:
+      - hardware_gen
+    batch_process_fn:
+      _target_: t2.train.augment.ComposeAugmentation
+      augmentations:
+        - _target_: t2.train.augment.AddPositionId
+          pos_seq_lens:
+            <<: *hardware_pos_seq_lens
+        - _target_: t2.train.augment.AddJointOrderAugmentation
+        # - _target_: t2.train.augment.TransformAugmentation
+        #   pos_aug_magnitude: [0.3, 0.3, 0.0]
+        #   orn_aug_magnitude: [0.0, 0.0, 0.5]
+        #   affected_pose_fields:
+        #     - target_pose
+        #     # - free_link_obs # fixed based arms don't have free link obs
+        #     - track_link_obs
+
+model:
+  pos_embs:
+    order:
+      _target_: torch.nn.Embedding
+      num_embeddings: 2
+      embedding_dim: ${model.backbone.hidden_dim}
+# evals:
+#   hardware_gen:
+#     runner:
+#       render: false
+#       env:
+#     batch_process_fn:
+#       _target_: t2.train.augment.AddPositionId
+#       pos_seq_lens:
+#         <<: *hardware_pos_seq_lens
+#     timestep_sampler:
+#       num_rollout_steps: ${seq_len.rollout_steps}
+#     traj_indices:
+#       - 0
+#       - 1
+#       - 2
+#       - 3
+#       - 4
+#       - 5
+#       - 6
+#       - 7
+#       - 8
+#       - 9
+#       - 10
+#       - 11
+#       - 12
+#       - 13
+#       - 14
+#       - 15
+#       - 16
+#       - 17
+#       - 18
+#       - 19
+
+# ViperX design-space token counts
+seq_len:
+  dyna_joint: 14
+  free_link: 1
+  fixed_joint: 22
+  link: 18
+  actuator: 7
+  track_link: 1

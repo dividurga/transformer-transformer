@@ -1,0 +1,10 @@
+defaults:
+  - optimize_cmaes_base
+  - runner: rl
+  - env@runner.env: umi_on_legs_plus_plus_from_choice
+  - _self_
+
+choice_to_ckpt_path: choice_to_ckpt_path.json
+
+robogen_from_params_fn:
+  _target_: t2.robogen.umi_on_legs_plus_plus.umi_on_legs_plus_plus_from_params

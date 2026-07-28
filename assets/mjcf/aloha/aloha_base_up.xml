@@ -1,0 +1,64 @@
+<mujoco model="aloha_base">
+    <compiler angle="radian" meshdir="assets" autolimits="true" />
+
+    <asset>
+        <mesh file="vx300s_1_base.stl" scale="0.001 0.001 0.001" />
+    </asset>
+
+    <default>
+        <default class="vx300s">
+            <site group="4" />
+            <default class="visual">
+                <geom type="mesh" mass="0" group="2" contype="0" conaffinity="0" />
+            </default>
+            <default class="collision">
+                <geom group="3" type="mesh" condim="6" friction="1 5e-3 5e-4" solref=".01 1" />
+            </default>
+        </default>
+    </default>
+
+    <worldbody>
+        <body name="base_link" childclass="vx300s" pos="0 0 0.0" euler="0 0 0">
+            <geom quat="1 0 0 1" class="visual" mesh="vx300s_1_base" />
+            <geom type="cylinder" size="0.065 0.04" pos="0 0 0.04" class="collision"
+                rgba="1 0
+            0 1" mass="0.5" />
+            <geom type="box" size="0.145 0.055 0.005" pos="-0.04 0 0.005" class="collision"
+                rgba="1 0 0 1" mass="0.069034" />
+            <geom type="box" size="0.058 0.041 0.027" pos="-0.132 0 0.027" class="collision"
+                rgba="1 0 0 1" mass="0.4" />
+            <site name="shoulder_mount" pos="0 0 0.079" />
+        </body>
+    </worldbody>
+
+    <custom>
+        <!-- euler 0 0 0 -->
+        <numeric name="base_link\body\pos\0\range\y" size='2' data='-0.8 -0.1' />
+        <numeric name="base_link\body\pos\1\range\y" size='2' data='-0.5 0.5' />
+        <numeric name="base_link\body\pos\2\range\y" size='2' data='-0.3 0.3' />
+        <numeric name="base_link\body\euler\2\range\y" size='2'
+            data='1.57079632679 -1.57079632679' />
+
+        <!-- euler 1.57079632679 0 0 -->
+        <!-- <numeric name="base_link\body\pos\0\range\y" size='2' data='-0.8 -0.1' />
+        <numeric name="base_link\body\pos\1\range\y" size='2' data='0.2 1.0' />
+        <numeric name="base_link\body\pos\2\range\y" size='2' data='-0.3 0.3' />
+        <numeric name="base_link\body\euler\2\range\y" size='2'
+            data='1.57079632679 -1.57079632679' /> -->
+
+        <!-- euler -1.57079632679 0 0 -->
+        <!-- <numeric name="base_link\body\pos\0\range\y" size='2' data='-0.6 -0.6' />
+        <numeric name="base_link\body\pos\1\range\y" size='2' data='-0.6 -0.6' />
+        <numeric name="base_link\body\pos\2\range\y" size='2' data='0.3 0.3' />
+        <numeric name="base_link\body\euler\2\range\y" size='2'
+            data='1.57079632679 -1.57079632679' /> -->
+
+        <!-- euler 3.14159265359 0 0 -->
+        <!-- <numeric name="base_link\body\pos\0\range\y" size='2' data='-0.8 -0.3' />
+        <numeric name="base_link\body\pos\1\range\y" size='2' data='-0.5 0.5' />
+        <numeric name="base_link\body\pos\2\range\y" size='2' data='0.4 1.0' />
+        <numeric name="base_link\body\euler\2\range\y" size='2'
+            data='1.57079632679 -1.57079632679' /> -->
+    </custom>
+
+</mujoco>

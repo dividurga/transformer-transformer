@@ -1,0 +1,122 @@
+<mujoco model="aloha">
+    <compiler angle="radian" meshdir="assets" autolimits="true" />
+
+    <asset>
+        <mesh file="vx300s_1_base.stl" scale="0.001 0.001 0.001" />
+        <mesh file="vx300s_2_shoulder.stl" scale="0.001 0.001 0.001" />
+        <mesh file="vx300s_3_upper_arm.stl" scale="0.001 0.001 0.001" />
+        <mesh file="vx300s_4_upper_forearm.stl" scale="0.001 0.001 0.001" />
+        <mesh file="vx300s_5_lower_forearm.stl" scale="0.001 0.001 0.001" />
+        <mesh file="vx300s_6_wrist.stl" scale="0.001 0.001 0.001" />
+        <mesh file="custom_vx300s_3_upper_arm_part1.stl" />
+        <mesh file="custom_vx300s_3_upper_arm_part2.stl" />
+        <mesh file="custom_vx300s_3_upper_forearm_part1.stl" />
+        <mesh file="custom_vx300s_3_upper_forearm_part2.stl" />
+    </asset>
+
+    <default>
+        <default class="vx300s">
+            <joint axis="0 1 0" actuatorfrcrange="-35 35" actuatorgravcomp="true" />
+            <motor ctrlrange="-35 35" />
+            <!-- group 4 means not a tracking site -->
+            <site group="4" />
+            <default class="waist">
+                <joint axis="0 0 1" range="-3.14158 3.14158" damping="5.76" />
+                <position ctrlrange="-3.14158 3.14158" kp="43" forcerange="-35 35" />
+            </default>
+            <default class="shoulder">
+                <joint range="-1.85005 1.25664" armature="0.395" frictionloss="2.0" damping="20.0"
+                    actuatorfrcrange="-144 144" />
+                <position ctrlrange="-1.85005 1.25664" kp="265" forcerange="-144 144" />
+            </default>
+            <default class="elbow">
+                <joint range="-1.76278 1.6057" armature="0.383" frictionloss="1.15" damping="18.49"
+                    actuatorfrcrange="-59 59" />
+                <position ctrlrange="-1.76278 1.6057" kp="227" forcerange="-59 59" />
+            </default>
+            <default class="forearm_roll">
+                <joint axis="1 0 0" range="-3.14158 3.14158" armature="0.14" damping="6.78"
+                    actuatorfrcrange="-22 22" />
+                <position ctrlrange="-3.14158 3.14158" kp="78" forcerange="-22 22" />
+            </default>
+            <default class="wrist_angle">
+                <joint range="-1.8675 2.23402" armature="0.008" damping="6.28"
+                    actuatorfrcrange="-35 35" />
+                <position ctrlrange="-1.8675 2.23402" kp="37" forcerange="-35 35" />
+            </default>
+            <default class="visual">
+                <geom type="mesh" mass="0" group="2" contype="0" conaffinity="0" />
+            </default>
+            <default class="collision">
+                <geom group="3" type="mesh" condim="6" friction="1 5e-3 5e-4" solref=".01 1" />
+            </default>
+        </default>
+    </default>
+
+    <worldbody>
+        <body name="base_link" childclass="vx300s">
+            <geom quat="1 0 0 1" class="visual" mesh="vx300s_1_base" />
+            <geom type="cylinder" size="0.065 0.04" pos="0 0 0.04" class="collision"
+                rgba="1 0
+            0 1" mass="0.5" />
+            <geom type="box" size="0.145 0.055 0.005" pos="-0.04 0 0.005" class="collision"
+                rgba="1 0 0 1" mass="0.069034" />
+            <geom type="box" size="0.058 0.041 0.027" pos="-0.132 0 0.027" class="collision"
+                rgba="1 0 0 1" mass="0.4" />
+            <body name="shoulder_link" pos="0 0 0.079">
+                <joint name="waist" class="waist" />
+                <geom pos="0 0 -0.003" quat="1 0 0 1" class="visual" mesh="vx300s_2_shoulder" />
+                <geom pos="0.0005 0 0.033" rgba='1 0 0 1' type="box" size="0.017 0.05 0.0285"
+                    class="collision" mass="0.798614" />
+                <body name="upper_arm_link" pos="0 0 0.04805">
+                    <geom pos="0.0005 0 0.045" rgba='1 0 0 1' type="box" size="0.017 0.05 0.015"
+                        class="collision" mass="0.1" name="upper_arm_link_motor_housing" />
+                    <joint name="shoulder" class="shoulder" />
+                    <geom quat="1 0 0 1" class="visual" mesh="custom_vx300s_3_upper_arm_part1"
+                    />
+                    <geom quat="1 0 0 1" class="visual" mesh="custom_vx300s_3_upper_arm_part2"
+                        name="upper_arm_connector" />
+                    <geom type="box" size="0.01 0.02 0.103" pos="0 0 0.167" density="100"
+                        rgba="0.2 0.8 0.4 1" name="upper_arm_extension" class="collision" />
+
+                    <geom pos="0.033 0 0.3" rgba='1 0 0 1' type="box"
+                        size="0.04 0.05 0.015"
+                        class="collision" mass="0" name="upper_forearm_link_motor_housing" />
+                    <body name="upper_forearm_link" pos="0.05955 0 0.3">
+                        <geom pos="0.045 0 0.0005 " rgba='1 0 0 1' type="box"
+                            size="0.017 0.05 0.015"
+                            class="collision" mass="0" name="upper_forearm_link_connector" />
+                        <joint name="elbow" class="elbow" />
+                        <geom class="visual" mesh="custom_vx300s_3_upper_forearm_part1" mass="0.05" />
+                        <geom class="visual" mesh="custom_vx300s_3_upper_forearm_part2"
+                            name="upper_forearm_connector" mass="0.05" />
+                        <geom type="box" size="0.064685 0.02 0.01" pos="0.128684 0 0" density="100"
+                            rgba="0.2 0.8 0.4 1" name="upper_forearm_extension" class="collision" />
+                        <body name="lower_forearm_link" pos="0.2 0 0">
+                            <joint name="forearm_roll" class="forearm_roll" />
+                            <geom quat="0 1 0 0" class="visual" mesh="vx300s_5_lower_forearm" />
+                            <geom type="box" size="0.06 0.02 0.02" pos="0.056 0 0.0" rgba="1 0 0 1"
+                                mass="0.414823" class="collision" />
+                            <body name="wrist_link" pos="0.1 0 0">
+                                <inertial pos="0.046743 -7.6652e-06 0.010565"
+                                    quat="-0.00100191 0.544586 0.0026583 0.8387"
+                                    mass="0.115395"
+                                    diaginertia="5.45707e-05 4.63101e-05 4.32692e-05" />
+                                <joint name="wrist_angle" class="wrist_angle" />
+                                <geom quat="1 0 0 1" class="visual" mesh="vx300s_6_wrist" mass="0" />
+                                <geom type="box" size="0.0155 0.027 0.02" pos="0.05 0 0.012"
+                                    rgba="1 0 0 1"
+                                    mass="0.115395"
+                                    class="collision" />
+                                <site name="gripper_mount_site" euler="0 1.57 -1.57"
+                                    pos="0.104744 0 0" />
+                            </body>
+                        </body>
+                    </body>
+                </body>
+            </body>
+        </body>
+    </worldbody>
+
+
+</mujoco>

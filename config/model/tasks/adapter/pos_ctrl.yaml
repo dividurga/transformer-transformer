@@ -1,0 +1,9 @@
+defaults:
+  - base
+  - _self_
+modality:
+  name: ctrl
+  max_seq_len: ${seq_len.actuator}
+  id_attrs: ???
+  attrs:
+    target_qpos: 1

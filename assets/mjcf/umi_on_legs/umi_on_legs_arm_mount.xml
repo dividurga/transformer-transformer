@@ -1,0 +1,13 @@
+<mujoco model="umi_on_legs">
+
+    <include
+        file="umi_on_legs.xml" />
+
+    <custom>
+        <numeric name="arx5_base_link\body\pos\0\range\y" size='2' data='-0.2 0.2' />
+        <numeric name="arx5_base_link\body\pos\1\range\y" size='2' data='0.0 0.0' />
+        <numeric name="arx5_base_link\body\pos\2\range\y" size='2' data='0.094 0.15' />
+
+    </custom>
+
+</mujoco>

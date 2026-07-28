@@ -1,0 +1,4 @@
+defaults:
+  - link
+  - diffuse
+  - _self_

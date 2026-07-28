@@ -1,0 +1,11 @@
+<mujoco>
+  <actuator>
+    <position class="waist" name="waist" joint="waist" />
+    <position class="shoulder" name="shoulder" joint="shoulder" />
+    <position class="elbow" name="elbow" joint="elbow" />
+    <position class="forearm_roll" name="forearm_roll" joint="forearm_roll" />
+    <position class="wrist_angle" name="wrist_angle" joint="wrist_angle" />
+    <position class="wrist_rotate" name="wrist_rotate" joint="wrist_rotate" />
+    <!-- <position class="finger" name="gripper" joint="left_finger" /> -->
+  </actuator>
+</mujoco>

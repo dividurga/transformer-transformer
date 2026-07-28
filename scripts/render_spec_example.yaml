@@ -1,0 +1,21 @@
+# Example render spec for scripts/render_all_results.py.
+# Usage:
+#   python scripts/render_all_results.py --spec scripts/render_spec_example.yaml \
+#       --zarr_root /path/to/eval_results/ --render_root supp_renders/
+robots:
+  # Robot name; also used as the output subdirectory under --render_root.
+  # "quadruped" additionally renders free_link_obs (floating base).
+  viperx:
+    # Blender template .blend file used to render this robot.
+    template: blender_templates/vis_template_viperx.blend
+    tasks:
+      # Task name, one entry per task to render.
+      tracking_only:
+        # Method name, one entry per method to render.
+        guided:
+          # Eval zarr, relative to --zarr_root (or absolute).
+          path: path/to/your_eval.zarr
+          # Optional: episode seeds to render; omit to render all episodes.
+          traj_indices: [0, 1]
+        baseline:
+          path: path/to/your_baseline_eval.zarr

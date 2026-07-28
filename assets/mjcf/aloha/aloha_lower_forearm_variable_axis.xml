@@ -1,0 +1,44 @@
+<mujoco model="aloha">
+    <compiler angle="radian" meshdir="assets" autolimits="true" />
+
+    <asset>
+        <mesh file="vx300s_5_lower_forearm.stl" scale="0.001 0.001 0.001" />
+    </asset>
+
+    <default>
+        <default class="vx300s">
+            <joint axis="0 1 0" actuatorfrcrange="-35 35" actuatorgravcomp="true" />
+            <!-- group 4 means not a tracking site -->
+            <site group="4" />
+            <default class="forearm_roll">
+                <joint range="-3.14158 3.14158" armature="0.14" damping="6.78"
+                    actuatorfrcrange="-22 22" />
+                <position ctrlrange="-3.14158 3.14158" kp="78" forcerange="-22 22" />
+            </default>
+            <default class="visual">
+                <geom type="mesh" mass="0" group="2" contype="0" conaffinity="0" />
+            </default>
+            <default class="collision">
+                <geom group="3" type="mesh" condim="6" friction="1 5e-3 5e-4" solref=".01 1" />
+            </default>
+        </default>
+    </default>
+
+    <worldbody>
+        <body name="lower_forearm_link" childclass="vx300s">
+            <joint name="forearm_roll" class="forearm_roll" axis="1 0 0" />
+            <geom quat="0 1 0 0" class="visual" mesh="vx300s_5_lower_forearm" />
+            <geom type="box" size="0.06 0.02 0.02" pos="0.056 0 0.0" rgba="1 0 0 1"
+                mass="0.414823" class="collision" />
+            <site name="wrist_link_mount" pos="0.1 0 0" />
+
+        </body>
+    </worldbody>
+
+    <custom>
+        <tuple name="actuators">
+            <element objtype="joint" objname="forearm_roll" />
+        </tuple>
+        <numeric name="forearm_roll\joint\axis\:\choice\y" size='9' data='1 0 0 0 1 0 0 0 1' />
+    </custom>
+</mujoco>

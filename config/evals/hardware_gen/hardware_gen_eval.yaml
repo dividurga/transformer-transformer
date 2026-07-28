@@ -1,0 +1,21 @@
+defaults:
+  - /hardware_optimizer@hardware_optimizer_fn: zeroth_order
+  - /reward_fns@hardware_optimizer_fn.reward_fns: tracking_only
+  - _self_
+
+_partial_: true
+_target_: t2.eval.hardware_optimization.evaluate_hardware_opt
+decoder: ???
+log_dir: ???
+num_seeds_per_datapoint: 9
+runner:
+  use_gui: false
+  render: false
+  render_fps: 24
+  env:
+    pickle_path: ???
+optimize_hardware: true
+gravcomp: ???
+traj_indices: ???
+post_process_mjcf_fns: null
+post_process_mj_model_fns: null

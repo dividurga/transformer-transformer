@@ -1,0 +1,6 @@
+<mujoco>
+  <keyframe>
+    <key name="home" qpos="0 -0.96 1.16 0 -0.3 0"
+      ctrl="0 -0.96 1.16 0 -0.3 0" />
+  </keyframe>
+</mujoco>

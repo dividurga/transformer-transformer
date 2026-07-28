@@ -1,0 +1,77 @@
+<mujoco model="spine">
+    <include file="defaults.xml" />
+
+    <worldbody>
+        <body name="spine_base" pos="0 0 0">
+            <!-- Spine column lower (outer) - hollow with 4 thin walls -->
+            <!-- Outer half-size: 0.045, wall thickness: 0.003, inner clearance: 0.039 -->
+            <geom name="spine_lower_front" class="body_panel" type="box"
+                size="0.045 0.003 0.12" pos="0 0.042 0.12" friction="0 0 0" condim="1" />
+            <geom name="spine_lower_back" class="body_panel" type="box"
+                size="0.045 0.003 0.12" pos="0 -0.042 0.12" friction="0 0 0" condim="1" />
+            <geom name="spine_lower_left" class="body_panel" type="box"
+                size="0.003 0.039 0.12" pos="-0.042 0 0.12" friction="0 0 0" condim="1" />
+            <geom name="spine_lower_right" class="body_panel" type="box"
+                size="0.003 0.039 0.12" pos="0.042 0 0.12" friction="0 0 0" condim="1" />
+
+            <!-- First prismatic joint -->
+            <body name="spine_middle" pos="0 0 0.0">
+                <joint name="spine_joint_lower" type="slide" axis="0 0 1" range="0 0.10"
+                    damping="200" armature="10.0" />
+                <!-- Spine column middle - hollow with 4 thin walls -->
+                <!-- Outer half-size: 0.038, wall thickness: 0.003, inner clearance: 0.032 -->
+                <geom name="spine_middle_front" class="body_panel" type="box"
+                    size="0.038 0.003 0.12" pos="0 0.035 0.16" friction="0 0 0" condim="1" />
+                <geom name="spine_middle_back" class="body_panel" type="box"
+                    size="0.038 0.003 0.12" pos="0 -0.035 0.16" friction="0 0 0" condim="1" />
+                <geom name="spine_middle_left" class="body_panel" type="box"
+                    size="0.003 0.032 0.12" pos="-0.035 0 0.16" friction="0 0 0" condim="1" />
+                <geom name="spine_middle_right" class="body_panel" type="box"
+                    size="0.003 0.032 0.12" pos="0.035 0 0.16" friction="0 0 0" condim="1" />
+
+                <!-- Second prismatic joint -->
+                <body name="spine_upper" pos="0 0 0.0">
+                    <joint name="spine_joint_upper" type="slide" axis="0 0 1" range="0 0.10"
+                        damping="100" armature="5.0" />
+                    <!-- Spine column upper (inner) - hollow with 4 thin walls -->
+                    <!-- Outer half-size: 0.031, wall thickness: 0.003, inner clearance: 0.025 -->
+                    <geom name="spine_upper_front" class="body_panel" type="box"
+                        size="0.031 0.003 0.12" pos="0 0.028 0.20" friction="0 0 0" condim="1" />
+                    <geom name="spine_upper_back" class="body_panel" type="box"
+                        size="0.031 0.003 0.12" pos="0 -0.028 0.20" friction="0 0 0" condim="1" />
+                    <geom name="spine_upper_left" class="body_panel" type="box"
+                        size="0.003 0.025 0.12" pos="-0.028 0 0.20" friction="0 0 0" condim="1" />
+                    <geom name="spine_upper_right" class="body_panel" type="box"
+                        size="0.003 0.025 0.12" pos="0.028 0 0.20" friction="0 0 0" condim="1" />
+
+                    <!-- Torso mount site at top of upper spine column -->
+                    <!-- Pipe-separated names allow choice between torso variants -->
+                    <site name="torso|torso_lean_mount" pos="0 0 0.32" />
+                </body>
+            </body>
+        </body>
+    </worldbody>
+
+    <keyframe>
+        <key name="home" qpos="0.05 0.05" ctrl="0.05 0.05" />
+        <key name="penalty_default_qpos_weight" qpos="10 10" />
+        <key name="mink_damping_scale" qpos="100 100" />
+    </keyframe>
+
+    <actuator>
+        <!-- Lower spine joint actuator - moderate kp with high kv for overdamped response -->
+        <position name="spine_joint_lower" joint="spine_joint_lower" kp="20000" kv="5000"
+            forcerange="-5000 5000" ctrlrange="0 0.10" />
+        <!-- Upper spine joint actuator - similar gains for balanced response -->
+        <position name="spine_joint_upper" joint="spine_joint_upper" kp="15000" kv="5000"
+            forcerange="-4000 4000" ctrlrange="0 0.10" />
+    </actuator>
+
+    <custom>
+        <!-- Spine joint range variation (5-25cm travel per joint, base 10cm) -->
+        <!-- Scale factor: y/0.10 = y*10 (all dimensions scale proportionally) -->
+        <numeric name="spine_joint_lower\joint\range\1\range\y" size='2' data='0.05 0.25' />
+        <text name="spine_range"
+            data="spine_joint_lower\joint\range\1\range\y;spine_joint_upper\joint\range\1\range\y;spine_joint_lower\actuator\ctrlrange\1\range\y;spine_joint_upper\actuator\ctrlrange\1\range\y;home\key\qpos\0\range\y*0;home\key\qpos\1\range\y*0;home\key\ctrl\0\range\y*0;home\key\ctrl\1\range\y*0;spine_lower_front\geom\size\2\range\y*0.5+0.02;spine_lower_back\geom\size\2\range\y*0.5+0.02;spine_lower_left\geom\size\2\range\y*0.5+0.02;spine_lower_right\geom\size\2\range\y*0.5+0.02;spine_lower_front\geom\pos\2\range\y*0.5+0.02;spine_lower_back\geom\pos\2\range\y*0.5+0.02;spine_lower_left\geom\pos\2\range\y*0.5+0.02;spine_lower_right\geom\pos\2\range\y*0.5+0.02;spine_middle_front\geom\size\2\range\y*0.5+0.02;spine_middle_back\geom\size\2\range\y*0.5+0.02;spine_middle_left\geom\size\2\range\y*0.5+0.02;spine_middle_right\geom\size\2\range\y*0.5+0.02;spine_middle_front\geom\pos\2\range\y*0.5+0.02;spine_middle_back\geom\pos\2\range\y*0.5+0.02;spine_middle_left\geom\pos\2\range\y*0.5+0.02;spine_middle_right\geom\pos\2\range\y*0.5+0.02;spine_upper_front\geom\size\2\range\y*0.5+0.02;spine_upper_back\geom\size\2\range\y*0.5+0.02;spine_upper_left\geom\size\2\range\y*0.5+0.02;spine_upper_right\geom\size\2\range\y*0.5+0.02;spine_upper_front\geom\pos\2\range\y*0.5+0.02;spine_upper_back\geom\pos\2\range\y*0.5+0.02;spine_upper_left\geom\pos\2\range\y*0.5+0.02;spine_upper_right\geom\pos\2\range\y*0.5+0.02;torso|torso_lean_mount\site\pos\2\range\y+0.04" />
+    </custom>
+</mujoco>

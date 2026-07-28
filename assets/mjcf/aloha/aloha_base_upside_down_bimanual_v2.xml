@@ -1,0 +1,68 @@
+<mujoco model="aloha_base_upside_down_bimanual_v2">
+    <compiler angle="radian" meshdir="assets" autolimits="true" />
+
+    <asset>
+        <mesh file="vx300s_1_base.stl" scale="0.001 0.001 0.001" />
+    </asset>
+
+    <default>
+        <default class="vx300s">
+            <site group="4" />
+            <default class="visual">
+                <geom type="mesh" mass="0" group="2" contype="0" conaffinity="0" />
+            </default>
+            <default class="collision">
+                <geom group="3" type="mesh" condim="6" friction="1 5e-3 5e-4" solref=".01 1" />
+            </default>
+        </default>
+    </default>
+
+    <worldbody>
+        <body name="base_link" childclass="vx300s" pos="0 0 0.0" euler="0 0 0">
+            <geom type="box" size="0.45 0.55 0.005" pos="0 0 0.005" class="collision"
+                rgba="0.4 0.4 0.4 1" mass="2.0" />
+            <body name="left_arm_holder" pos="0 0.45 1.0" euler="3.141592653589793 0 0">
+                <geom name="left_base_collision" type="cylinder" size="0.065 0.04"
+                    pos="0 0 0.04" class="collision" rgba="1 0 0 1" mass="0.5" />
+                <geom name="left_base_visual" quat="1 0 0 1" class="visual" mesh="vx300s_1_base"
+                    pos="0 0 0" />
+                <site name="left:shoulder_mount" pos="0 0 0.079" />
+            </body>
+            <body name="right_arm_holder" pos="0 -0.45 1.0" euler="3.141592653589793 0 0">
+                <geom name="right_base_collision" type="cylinder" size="0.065 0.04"
+                    pos="0 0 0.04" class="collision" rgba="1 0 0 1" mass="0.5" />
+                <geom name="right_base_visual" quat="1 0 0 1" class="visual" mesh="vx300s_1_base"
+                    pos="0 0 0" />
+                <site name="right:shoulder_mount" pos="0 0 0.079" />
+            </body>
+        </body>
+    </worldbody>
+
+    <custom>
+        <numeric name="base_link\body\pos\0\range\y" size='2' data='-0.8 -0.1' />
+        <numeric name="base_link\body\pos\1\range\y" size='2' data='-0.0 0.0' />
+        <numeric name="base_link\body\pos\2\range\y" size='2' data='-0.1 0.1' />
+
+        <numeric name="left_arm_holder\body\pos\0\range\y" size='2' data='-0.80 0.80' />
+        <text name="symmetric_arm_x"
+            data="left_arm_holder\body\pos\0\range\y;right_arm_holder\body\pos\0\range\y" />
+
+        <numeric name="left_arm_holder\body\pos\2\range\y" size='2' data='0.40 1.60' />
+        <text name="symmetric_arm_z"
+            data="left_arm_holder\body\pos\2\range\y;right_arm_holder\body\pos\2\range\y" />
+
+        <numeric name="left_arm_holder\body\pos\1\range\y" size='2' data='0.20 0.45' />
+        <text name="symmetric_arm_spacing"
+            data="left_arm_holder\body\pos\1\range\y;right_arm_holder\body\pos\1\range\-y" />
+
+        <!-- V1 variations + symmetric z-yaw: rotates each arm holder around world z;
+             theta sampled in [-pi/4, pi/4]. Applied to holder body's euler[2]
+             (composed after the 180-around-x flip), so the arm's pan axis stays
+             vertical and only the arm's forward direction rotates symmetrically. -->
+        <numeric name="left_arm_holder\body\euler\2\range\y" size='2'
+            data='-3.141592653589793 3.141592653589793' />
+        <text name="symmetric_arm_yaw"
+            data="left_arm_holder\body\euler\2\range\y;right_arm_holder\body\euler\2\range\-y" />
+    </custom>
+
+</mujoco>

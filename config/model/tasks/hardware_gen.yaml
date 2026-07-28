@@ -1,0 +1,115 @@
+# from motion goal, predict everything
+defaults:
+  # input trajectory
+  - adapter@adapters.hardware_goal: pose
+  # output hardware
+  - adapter@adapters.link: link_diffuse
+  - adapter@adapters.dyna_joint: dyna_joint_diffuse
+  - adapter@adapters.fixed_joint: fixed_joint_diffuse
+  - adapter@adapters.actuator: actuator_diffuse
+  # output state
+  - adapter@adapters.track_link_obs: pose_diffuse
+  - adapter@adapters.dyna_joint_obs: qpos_diffuse
+  - adapter@adapters.actuator_obs: actuator_obs_diffuse
+  # NOTE: if design space includes free links, then add the free link adapter
+  # see `addon_hardware_quadruped.yaml` for an example
+  # output control
+  - adapter@adapters.ctrl: pos_ctrl_diffuse
+  # adapter params
+  - diffusion_task
+  - _self_
+
+noise_scheduler:
+  num_train_timesteps: 100
+# Deliberately true despite the global use_flash_attn=false default: the
+# hardware_gen task uses no key-padding masks, so flash attention is safe
+# here, and every released hardware_gen checkpoint trained with it. Flash
+# attention requires half precision — keep accelerator.mixed_precision=bf16
+# (the train.yaml default) or this task crashes with "No available kernel".
+use_flash_attn: true
+
+adapters:
+  hardware_goal:
+    loss_weight: 0.0
+    modality:
+      name: target_pose
+      id_attrs:
+        - time/id
+        - track_link/id
+      max_seq_len: ${eval:"${seq_len.track_link}*${seq_len.rollout_steps}"}
+  # loss weight > 0 for outputs
+  track_link_obs:
+    loss_weight: 1.0
+    # don't override with padding values because how many
+    # `track_link_obs` tokens there are should map exactly
+    # to the number of `target_pose` and `track_link`
+    only_use_mask_for_padding: false
+    modality:
+      name: track_link_obs
+      id_attrs:
+        - time/id
+        - track_link/id
+      max_seq_len: ${eval:"${seq_len.track_link_obs}*${seq_len.rollout_steps}"}
+  link:
+    loss_weight: 1.0
+    # force network to learn the padding
+    only_use_mask_for_padding: true
+    modality:
+      attrs:
+        # explicitly diffuse out track_link/id in binary format
+        track_link/id: ${dims.track_link_id_bits} # binary
+  dyna_joint:
+    loss_weight: 1.0
+    # force network to learn the padding
+    only_use_mask_for_padding: true
+    modality:
+      id_attrs:
+        - id
+        - order/id # {0,1}
+      attrs:
+        # explicitly diffuse out link/id in binary format
+        link/id: ${dims.link_id_bits} # binary
+  fixed_joint:
+    loss_weight: 1.0
+    # force network to learn the padding
+    only_use_mask_for_padding: true
+    modality:
+      id_attrs:
+        - id
+        - order/id # {0,1}
+      attrs:
+        # explicitly diffuse out link/id in binary format
+        link/id: ${dims.link_id_bits} # binary
+  actuator:
+    loss_weight: 1.0
+    # force network to learn the padding
+    only_use_mask_for_padding: true
+    modality:
+      attrs:
+        # explicitly diffuse out dyna_joint/id in binary format
+        dyna_joint/id: ${dims.dyna_joint_id_bits} # binary
+  dyna_joint_obs:
+    loss_weight: 1.0
+    only_use_mask_for_padding: true
+    modality:
+      id_attrs:
+        - time/id
+        - dyna_joint/id
+      name: dyna_joint_obs
+      max_seq_len: ${eval:"${seq_len.dyna_joint_obs}*${seq_len.rollout_steps}"}
+  actuator_obs:
+    loss_weight: 1.0
+    only_use_mask_for_padding: true
+    modality:
+      id_attrs:
+        - time/id
+        - actuator/id
+      max_seq_len: ${eval:"${seq_len.actuator_obs}*${seq_len.rollout_steps}"}
+  ctrl:
+    loss_weight: 1.0
+    only_use_mask_for_padding: true
+    modality:
+      id_attrs:
+        - actuator/id
+        - time/id
+      max_seq_len: ${eval:"${seq_len.actuator}*${seq_len.rollout_steps}"}

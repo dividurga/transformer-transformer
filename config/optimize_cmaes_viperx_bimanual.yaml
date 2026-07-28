@@ -1,0 +1,24 @@
+defaults:
+  - optimize_cmaes_base
+  - runner: bimanual_mink
+  - env@runner.env: viperx_bimanual
+  - _self_
+
+pickle_path: data/unfold-repeat-05022026.pkl
+
+choice_components: t2.robogen.viperx.VIPERX_BIMANUAL_COMPONENTS
+
+robogen_from_params_fn:
+  _target_: t2.robogen.viperx.viperx_bimanual_full_variation_from_params
+
+traj_indices:
+  - 0
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+  - 6
+  - 7
+  - 8
+  - 9

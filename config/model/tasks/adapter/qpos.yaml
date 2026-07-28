@@ -1,0 +1,10 @@
+defaults:
+  - base
+  - _self_
+modality:
+  name: qpos
+  max_seq_len: ${eval:"${seq_len.dyna_joint_obs}*${seq_len.rollout_steps}"} 
+  attrs:
+    qpos: 1
+    qvel: 1
+  id_attrs: ???

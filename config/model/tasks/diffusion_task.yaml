@@ -1,0 +1,9 @@
+defaults:
+  - noise_scheduler: ddim
+  - _self_
+_target_: t2.model.task.task.MultiModalDiffusionTask
+timestep_mode: condition
+num_eval_seeds: 3
+num_inference_steps: ${.noise_scheduler.num_train_timesteps}
+hidden_dim: ${model.backbone.hidden_dim}
+use_flash_attn: ${use_flash_attn}

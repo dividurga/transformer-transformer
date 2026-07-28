@@ -1,0 +1,4 @@
+defaults:
+  - actuator
+  - diffuse
+  - _self_

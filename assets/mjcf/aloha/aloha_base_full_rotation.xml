@@ -1,0 +1,9 @@
+<mujoco model="aloha_base">
+    <compiler angle="radian" meshdir="assets" autolimits="true" />
+
+    <worldbody>
+        <site
+            name="base_up|base_down|base_left|base_right_mount"
+        />
+    </worldbody>
+</mujoco>

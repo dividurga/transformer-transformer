@@ -1,0 +1,4 @@
+defaults:
+  - pos_ctrl
+  - diffuse
+  - _self_

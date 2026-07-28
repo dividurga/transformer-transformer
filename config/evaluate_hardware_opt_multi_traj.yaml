@@ -1,0 +1,31 @@
+defaults:
+  - evaluate_hardware_opt
+  - _self_
+
+# Composition configuration for multi-trajectory optimization
+# This enables composed diffusion where noise predictions from multiple
+# trajectories are combined (averaged or summed) before the scheduler step.
+composition:
+  enabled: true
+  # Sample names to apply composition to (hardware-related modalities)
+  sample_names:
+    - link
+    - dyna_joint
+    - actuator
+    - fixed_joint
+  # Method for combining noise predictions: "avg" or "sum"
+  method: avg
+
+# Override traj_indices to be a list of lists
+# Each inner list contains trajectory indices to compose together
+# The outer list represents different optimization runs
+# IMPORTANT: All inner lists MUST have the same length because
+# ComposedMultiModalDiffusionTask uses a fixed num_composed for tensor reshaping
+eval_fn:
+  traj_indices:
+    - [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
+  runner:
+    # usually, hardware dict doesn't change between episodes
+    # however, hardware optimization's actual value is stored in the hardware dict
+    # as metadata, so we do want to dump the hardware dict every episode
+    dump_hardware_every_episode: true

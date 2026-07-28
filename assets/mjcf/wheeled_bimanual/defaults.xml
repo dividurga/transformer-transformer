@@ -1,0 +1,59 @@
+<mujoco model="defaults">
+    <compiler angle="radian" autolimits="true" />
+    <default>
+        <site group="0" />
+        <!-- Reduced density from 1000 to 300 for realistic robot mass (~20-30kg total) -->
+        <geom size="0.012" group="3" friction="1.0" condim="1"
+            density="300"
+            type="capsule"
+            shellinertia="true" rgba="0.96 0.94 0.92 1" />
+        <default class="small_geom">
+            <geom size="0.008" />
+        </default>
+        <default class="body_panel">
+            <!-- White/cream body panels - thin hollow panels -->
+            <geom type="box" density="100" rgba="0.98 0.96 0.94 1" shellinertia="false" />
+        </default>
+        <default class="accent_orange">
+            <!-- Orange accent pieces - thin decorative -->
+            <geom type="box" density="100" rgba="0.96 0.52 0.12 1" shellinertia="false" />
+        </default>
+        <default class="motor">
+            <!-- Motor styling - motors are dense due to copper windings -->
+            <geom shellinertia="false" type="cylinder" density="2000" rgba="0.75 0.75 0.75 1" />
+            <default class="big_motor">
+                <geom size="0.046 0.02" />
+            </default>
+            <default class="small_motor">
+                <!-- Reduced from 0.028 to 0.024 radius for better clearance -->
+                <geom size="0.024 0.018" />
+            </default>
+        </default>
+        <default class="wheel">
+            <geom type="cylinder" size="0.04 0.02" density="1200" rgba="0.15 0.15 0.15 1"
+                condim="3" friction="1 0.1 0.1" shellinertia="false" />
+        </default>
+        <default class="caster_wheel">
+            <geom type="sphere" size="0.025" density="1200" rgba="0.15 0.15 0.15 1"
+                condim="3" friction="0.8 0.02 0.01" shellinertia="false" />
+        </default>
+        <default class="gripper_finger">
+            <geom type="box" density="200" rgba="0.35 0.35 0.35 1" shellinertia="false" />
+        </default>
+        <joint axis="0 1 0" damping="1.0" armature="0.05" frictionloss="0.2"
+            solreflimit="0.005 1" />
+        <default class="shoulder">
+            <joint range="-3.14159 3.14159" damping="5.0" armature="0.1" />
+            <position forcerange="-100 100" ctrlrange="-3.14159 3.14159" kp="200" kv="20" />
+        </default>
+        <default class="elbow">
+            <joint range="-2.5 2.5" damping="4.0" armature="0.08" />
+            <position forcerange="-80 80" ctrlrange="-2.5 2.5" kp="150" kv="15" />
+        </default>
+        <default class="wrist">
+            <joint range="-2.0 2.0" damping="1.0" armature="0.02" />
+            <position forcerange="-40 40" ctrlrange="-2.0 2.0" kp="60" kv="6" />
+        </default>
+        <equality solref="0.005 1" />
+    </default>
+</mujoco>

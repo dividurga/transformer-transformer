@@ -1,0 +1,25 @@
+defaults:
+  - timestep_sampler: random
+
+_target_: t2.data.dataset.T2Dataset
+path: ???
+group_seq_lens: ???
+hardware_groups:
+  - actuator
+  - dyna_joint
+  - fixed_joint
+  - link
+rollout_groups:
+  - ctrl
+  - track_link_obs
+  - dyna_joint_obs
+  - free_link_obs
+  - actuator_obs
+  - target_pose
+load_into_memory: false
+min_episode_length: 100
+group_time_offsets: {}
+fast_launch: false
+use_cached_indices: true
+filter_episode_seeds: null
+filter_hardware_seeds: null

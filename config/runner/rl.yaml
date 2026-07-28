@@ -1,0 +1,7 @@
+defaults:
+  - base
+_target_:
+  t2.env.rl_runner.RLEnvRunner
+  # make sure this matches `target_traj_indices` in the environment config
+ckpt_path: ???
+qpos_noise: 0.0

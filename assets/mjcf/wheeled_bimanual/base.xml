@@ -1,0 +1,29 @@
+<mujoco model="wheeled_bimanual">
+    <visual>
+        <global offwidth="800" offheight="600" />
+    </visual>
+    <worldbody>
+        <!-- Fixed camera in world to see the robot (front-angled view) -->
+        <camera name="fixed_cam" pos="1.2 0.7 1.5" xyaxes="-0.447 0.894 0 -0.516 -0.258 0.816"
+            fovy="60" />
+
+        <body name="base" pos="0 0 0.005">
+            <joint name="joint_x" type="slide" axis="1 0 0" range="-2 2" />
+            <joint name="joint_y" type="slide" axis="0 1 0" range="-2 2" />
+            <joint name="joint_th" range="-3.14159 3.14159" />
+            <site name="wheeled_box_mount" />
+            <camera name="body_cam" mode="trackcom" pos="1.5 0 0.8"
+                xyaxes="0 1 0 -0.5 0 0.866" fovy="60" />
+        </body>
+    </worldbody>
+    <actuator>
+        <position name="joint_x" joint="joint_x" kp="100000" kv="5000" />
+        <position name="joint_y" joint="joint_y" kp="100000" kv="5000" />
+        <position name="joint_th" joint="joint_th" kp="5000" kv="100" />
+    </actuator>
+    <keyframe>
+        <key name="home" qpos="-0.25 0 0" ctrl="-0.25 0 0" />
+        <key name="penalty_default_qpos_weight" qpos="100 10 10" />
+        <key name="mink_damping_scale" qpos="1000 1000 1000" />
+    </keyframe>
+</mujoco>

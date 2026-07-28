@@ -1,0 +1,19 @@
+defaults:
+  - base
+
+_target_: t2.env.mink_runner.MinkEnvRunner
+look_ahead_steps: 4
+mink_solver: "daqp"
+mink_max_iters: 5
+mink_reset_max_iters: 50
+mink_pos_threshold: 1e-3
+mink_ori_threshold: 1e-3
+
+mink_pos_cost: 1.0
+mink_ori_cost: 1.0
+mink_lm_damping: 1.0
+mink_posture_cost: 1e-4
+
+qpos_noise: 0.0
+
+randomize_default_posture: false

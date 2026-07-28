@@ -1,0 +1,118 @@
+_target_: t2.mjx_env.track_env.TrackMjxEnv
+max_episode_length: 2000
+ctrl_dt: 0.02
+sim_dt: 0.005
+impratio: 1
+solver_iterations: 5
+solver_ls_iterations: 7
+action_scale: 0.25
+obs_time_indices: [0, 2, 4, 6, 8]
+clip_actions:
+  - -10.0
+  - 10.0
+
+# Reaching
+mj_model_fn:
+  _partial_: true
+  _target_: mujoco.MjModel.from_xml_path
+  filename: assets/mjcf/umi_on_legs/umi_on_legs_mjx_scene.xml
+trajectory_file: ???
+
+pos_sigma: 0.01
+orn_sigma: 0.5
+
+reward_exp_pose_err: 4.0
+reward_pos_err: 0.0
+reward_orn_err: 0.0
+
+penalty_orientation: -1.0
+penalty_action_rate: -0.002
+penalty_torque: -0.00005
+penalty_joint_vel: -0.002
+penalty_joint_acc: -0.00005
+penalty_joint_pos_limit: -1.0
+penalty_termination: -10.0
+penalty_default_qpos: -1.0 # scale over the default qpos weight defined in the model
+
+penalty_bad_contact_pairs:
+  - [floor, quadruped_manipulator/left_leg/calf_motor]
+  - [floor, quadruped_manipulator/right_leg/calf_motor]
+  - [floor, quadruped_manipulator/left_leg_1/calf_motor]
+  - [floor, quadruped_manipulator/right_leg_1/calf_motor]
+  # - [floor, quadruped_manipulator/body_collider]
+  - [
+      floor,
+      quadruped_manipulator/arx5/gripper_collider_1|quadruped_manipulator/rail/arx5/gripper_collider_1,
+    ]
+  - [
+      quadruped_manipulator/arx5/gripper_collider_1|quadruped_manipulator/rail/arx5/gripper_collider_1,
+      quadruped_manipulator/base_geom_7,
+    ]
+  - [
+      quadruped_manipulator/arx5/gripper_collider_1|quadruped_manipulator/rail/arx5/gripper_collider_1,
+      quadruped_manipulator/left_leg/calf_motor,
+    ]
+  - [
+      quadruped_manipulator/arx5/gripper_collider_1|quadruped_manipulator/rail/arx5/gripper_collider_1,
+      quadruped_manipulator/right_leg/calf_motor,
+    ]
+  - [
+      quadruped_manipulator/arx5/gripper_collider_2|quadruped_manipulator/rail/arx5/gripper_collider_2,
+      quadruped_manipulator/base_geom_7,
+    ]
+  - [
+      quadruped_manipulator/arx5/gripper_collider_2|quadruped_manipulator/rail/arx5/gripper_collider_2,
+      quadruped_manipulator/left_leg/calf_motor,
+    ]
+  - [
+      quadruped_manipulator/arx5/gripper_collider_2|quadruped_manipulator/rail/arx5/gripper_collider_2,
+      quadruped_manipulator/right_leg/calf_motor,
+    ]
+
+tracking_links:
+  - quadruped_manipulator/arx5/end_effector|quadruped_manipulator/rail/arx5/end_effector|end_effector
+impl: jax
+
+contact_threshold: 0.01
+penalty_bad_contact: -1.0
+
+reward_nan_to_num: -10.0
+reward_clip_positive: false
+
+kick_wait_times: [1.0, 3.0]
+kick_durations: [0.05, 0.2]
+velocity_kick: [0.5, 2.0]
+
+transport_interval: 100
+transport_magnitude:
+  _target_: jax.numpy.array
+  object:
+    - - -0.3
+      - -0.3
+      - 0.0
+    - - 0.3
+      - 0.3
+      - 0.3
+
+soft_joint_pos_limit_factor: 0.95
+
+reset_xy_pos: 0.3
+reset_z_angle: 0.5
+reset_qvel: 0.5
+reset_qpos: 0.01
+
+randomize_target_z_pos: [0.0, 0.2]
+
+pos_obs_enc: 'linear'
+terminate_on_bad_contact: true
+termination_fellover_threshold: 0.1 # the higher, the stricter
+termination_pos_err_threshold: 0.2
+termination_orn_err_threshold: 1.0
+termination_pose_consecutive_steps: 50
+
+obs_noise:
+  qpos: 0.001
+  qvel: 0.01
+  lin_vel: 0.02
+  ang_vel: 0.005
+  gravity: 0.005

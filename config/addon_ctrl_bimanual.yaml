@@ -1,0 +1,107 @@
+defaults:
+  - dataset@datasets.ctrl_rand.dataset: base
+  - model/tasks@model.tasks.ctrl: memoryless_nofreelink_ctrl
+  - override model/tasks/adapter@model.tasks.ctrl.adapters.link: link_log
+  - override model/tasks/adapter@model.tasks.ctrl.adapters.dyna_joint: dyna_joint_log
+  - override model/tasks/adapter@model.tasks.ctrl.adapters.actuator: actuator_log
+  - _self_
+
+ctrl_dataset_path: ???
+
+# NOTE: the released bimanual controllers are memoryless single-step
+# predictors (distilled from Mink/DiffIK), unlike the quadruped's 8-step
+# rollouts. train.yaml's own body wins over addon values for ctrl_seq_len,
+# so pass `ctrl_seq_len.rollout_steps=1` on the command line to match them.
+
+ctrl_pos_id_seq_lens: &ctrl_pos_id_seq_lens
+  dyna_joint:
+    - ${eval:"int(${ctrl_seq_len.dyna_joint}//2)"}
+    - 0
+    - 1
+    - 2
+  fixed_joint:
+    - ${eval:"int(${ctrl_seq_len.fixed_joint}//2)"}
+    - 0
+    - 1
+    - 2
+  link:
+    - ${ctrl_seq_len.link}
+    - 0
+    - 1
+    - 1
+  actuator:
+    - ${ctrl_seq_len.actuator}
+    - 0
+    - 1
+    - 1
+  # all obs are scaled by rollout_steps
+  track_link_obs/track_link:
+    - ${ctrl_seq_len.track_link}
+    - 0
+    - ${ctrl_seq_len.rollout_steps}
+    - 1
+  dyna_joint_obs/dyna_joint:
+    - ${ctrl_seq_len.dyna_joint_obs}
+    - 0
+    - ${ctrl_seq_len.rollout_steps}
+    - 1
+  actuator_obs/actuator:
+    - ${ctrl_seq_len.actuator_obs}
+    - 0
+    - ${ctrl_seq_len.rollout_steps}
+    - 1
+  ctrl/actuator:
+    - ${ctrl_seq_len.actuator}
+    - 0
+    - ${ctrl_seq_len.rollout_steps}
+    - 1
+  target_pose/track_link:
+    - ${ctrl_seq_len.track_link}
+    - 0
+    - ${ctrl_seq_len.rollout_steps}
+    - 1
+
+datasets:
+  ctrl_rand:
+    batch_size: ${train.batch_size}
+    dataset:
+      group_time_offsets:
+        target_pose: 4
+      path: ${ctrl_dataset_path}
+      group_seq_lens: ${ctrl_seq_len}
+      timestep_sampler:
+        num_rollout_steps: ${ctrl_seq_len.rollout_steps}
+      rollout_groups:
+        - ctrl
+        - track_link_obs
+        - dyna_joint_obs
+        # - free_link_obs <-- our mobile bimanual setup doesn't have free link obs
+        - actuator_obs
+        - target_pose
+    tasks:
+      - ctrl
+    batch_process_fn:
+      _target_: t2.train.augment.ComposeAugmentation
+      augmentations:
+        - _target_: t2.train.augment.AddPositionId
+          pos_seq_lens:
+            <<: *ctrl_pos_id_seq_lens
+        - _target_: t2.train.augment.AddJointOrderAugmentation
+        # Transform augmentations should not be enabled until transform augmentations
+        # also handle the wheeled base prismatic and revolution joints
+
+model:
+  pos_embs:
+    order:
+      _target_: torch.nn.Embedding
+      num_embeddings: 2
+      embedding_dim: ${model.backbone.hidden_dim}
+
+# Wheeled-bimanual design-space token counts
+seq_len:
+  dyna_joint: 40
+  free_link: 1
+  fixed_joint: 74
+  link: 55
+  actuator: 20
+  track_link: 2

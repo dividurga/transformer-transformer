@@ -1,0 +1,94 @@
+<mujoco>
+    <contact>
+        <exclude body1="quadruped_body" body2="left_leg/left_leg" />
+        <exclude body1="quadruped_body" body2="left_leg/thigh" />
+        <exclude body1="quadruped_body" body2="left_leg/calf" />
+        <exclude body1="quadruped_body" body2="right_leg/right_leg" />
+        <exclude body1="quadruped_body" body2="right_leg/thigh" />
+        <exclude body1="quadruped_body" body2="right_leg/calf" />
+        <exclude body1="quadruped_body" body2="left_leg_1/left_leg" />
+        <exclude body1="quadruped_body" body2="left_leg_1/thigh" />
+        <exclude body1="quadruped_body" body2="left_leg_1/calf" />
+        <exclude body1="quadruped_body" body2="right_leg_1/right_leg" />
+        <exclude body1="quadruped_body" body2="right_leg_1/thigh" />
+        <exclude body1="quadruped_body" body2="right_leg_1/calf" />
+
+
+        <exclude body1="left_leg/left_leg" body2="left_leg/thigh" />
+        <exclude body1="left_leg/left_leg" body2="left_leg/calf" />
+        <exclude body1="left_leg/left_leg" body2="right_leg/right_leg" />
+        <exclude body1="left_leg/left_leg" body2="right_leg/thigh" />
+        <exclude body1="left_leg/left_leg" body2="right_leg/calf" />
+        <exclude body1="left_leg/left_leg" body2="left_leg_1/left_leg" />
+        <exclude body1="left_leg/left_leg" body2="left_leg_1/thigh" />
+        <exclude body1="left_leg/left_leg" body2="left_leg_1/calf" />
+        <exclude body1="left_leg/left_leg" body2="right_leg_1/right_leg" />
+        <exclude body1="left_leg/left_leg" body2="right_leg_1/thigh" />
+        <exclude body1="left_leg/left_leg" body2="right_leg_1/calf" />
+
+        <exclude body1="left_leg/thigh" body2="left_leg/calf" />
+        <exclude body1="left_leg/thigh" body2="right_leg/right_leg" />
+        <exclude body1="left_leg/thigh" body2="right_leg/thigh" />
+        <exclude body1="left_leg/thigh" body2="right_leg/calf" />
+        <exclude body1="left_leg/thigh" body2="left_leg_1/left_leg" />
+        <exclude body1="left_leg/thigh" body2="left_leg_1/thigh" />
+        <exclude body1="left_leg/thigh" body2="left_leg_1/calf" />
+        <exclude body1="left_leg/thigh" body2="right_leg_1/right_leg" />
+        <exclude body1="left_leg/thigh" body2="right_leg_1/thigh" />
+        <exclude body1="left_leg/thigh" body2="right_leg_1/calf" />
+
+        <exclude body1="left_leg/calf" body2="right_leg/right_leg" />
+        <exclude body1="left_leg/calf" body2="right_leg/thigh" />
+        <exclude body1="left_leg/calf" body2="right_leg/calf" />
+        <exclude body1="left_leg/calf" body2="left_leg_1/left_leg" />
+        <exclude body1="left_leg/calf" body2="left_leg_1/thigh" />
+        <exclude body1="left_leg/calf" body2="left_leg_1/calf" />
+        <exclude body1="left_leg/calf" body2="right_leg_1/right_leg" />
+        <exclude body1="left_leg/calf" body2="right_leg_1/thigh" />
+        <exclude body1="left_leg/calf" body2="right_leg_1/calf" />
+
+        <exclude body1="right_leg/right_leg" body2="right_leg/thigh" />
+        <exclude body1="right_leg/right_leg" body2="right_leg/calf" />
+        <exclude body1="right_leg/right_leg" body2="left_leg_1/left_leg" />
+        <exclude body1="right_leg/right_leg" body2="left_leg_1/thigh" />
+        <exclude body1="right_leg/right_leg" body2="left_leg_1/calf" />
+        <exclude body1="right_leg/right_leg" body2="right_leg_1/right_leg" />
+        <exclude body1="right_leg/right_leg" body2="right_leg_1/thigh" />
+        <exclude body1="right_leg/right_leg" body2="right_leg_1/calf" />
+
+        <exclude body1="right_leg/thigh" body2="right_leg/calf" />
+        <exclude body1="right_leg/thigh" body2="left_leg_1/left_leg" />
+        <exclude body1="right_leg/thigh" body2="left_leg_1/thigh" />
+        <exclude body1="right_leg/thigh" body2="left_leg_1/calf" />
+        <exclude body1="right_leg/thigh" body2="right_leg_1/right_leg" />
+        <exclude body1="right_leg/thigh" body2="right_leg_1/thigh" />
+        <exclude body1="right_leg/thigh" body2="right_leg_1/calf" />
+
+        <exclude body1="right_leg/calf" body2="left_leg_1/left_leg" />
+        <exclude body1="right_leg/calf" body2="left_leg_1/thigh" />
+        <exclude body1="right_leg/calf" body2="left_leg_1/calf" />
+        <exclude body1="right_leg/calf" body2="right_leg_1/right_leg" />
+        <exclude body1="right_leg/calf" body2="right_leg_1/thigh" />
+        <exclude body1="right_leg/calf" body2="right_leg_1/calf" />
+
+        <exclude body1="left_leg_1/left_leg" body2="left_leg_1/thigh" />
+        <exclude body1="left_leg_1/left_leg" body2="left_leg_1/calf" />
+        <exclude body1="left_leg_1/left_leg" body2="right_leg_1/right_leg" />
+        <exclude body1="left_leg_1/left_leg" body2="right_leg_1/thigh" />
+        <exclude body1="left_leg_1/left_leg" body2="right_leg_1/calf" />
+
+        <exclude body1="left_leg_1/thigh" body2="left_leg_1/calf" />
+        <exclude body1="left_leg_1/thigh" body2="right_leg_1/right_leg" />
+        <exclude body1="left_leg_1/thigh" body2="right_leg_1/thigh" />
+        <exclude body1="left_leg_1/thigh" body2="right_leg_1/calf" />
+
+        <exclude body1="left_leg_1/calf" body2="right_leg_1/right_leg" />
+        <exclude body1="left_leg_1/calf" body2="right_leg_1/thigh" />
+        <exclude body1="left_leg_1/calf" body2="right_leg_1/calf" />
+
+        <exclude body1="right_leg_1/right_leg" body2="right_leg_1/thigh" />
+        <exclude body1="right_leg_1/right_leg" body2="right_leg_1/calf" />
+
+        <exclude body1="right_leg_1/thigh" body2="right_leg_1/calf" />
+    </contact>
+</mujoco>

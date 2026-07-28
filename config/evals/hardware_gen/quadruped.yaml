@@ -1,0 +1,18 @@
+defaults:
+  - hardware_gen_eval
+  - /runner: rl
+  - /env@runner.env: umi_on_legs_plus_plus_from_choice
+  - _self_
+
+gravcomp: false # true for only fixed base robots
+
+#########################################################
+##### HACK: Inorder to match defaults implicitly defined
+# in assets/mjcf/umi_on_legs_plus_plus/defaults.xml
+#########################################################
+post_process_mjcf_fns:
+  - _target_: t2.eval.hardware_optimization.post_process_mjcf_solver_parameters
+    _partial_: true
+post_process_mj_model_fns:
+  - _target_: t2.eval.hardware_optimization.post_process_sim_collision_pairs
+    _partial_: true

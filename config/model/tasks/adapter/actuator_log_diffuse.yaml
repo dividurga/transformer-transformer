@@ -1,0 +1,4 @@
+defaults:
+  - actuator_log
+  - diffuse
+  - _self_

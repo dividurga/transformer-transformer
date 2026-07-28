@@ -1,0 +1,8 @@
+# Extra-large capacity used by the released multi-task control checkpoints.
+_target_: t2.model.core.DiT
+hidden_dim: 1024
+depth: 8
+num_heads: 16
+mlp_ratio: 4
+attn_dropout: 0.0
+add_zero_attn: false

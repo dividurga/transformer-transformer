@@ -1,0 +1,86 @@
+<mujoco model="quadruped_manipulator">
+    <include file="defaults.xml" />
+    <include file="quadruped_contact_exclusion.xml" />
+
+    <worldbody>
+        <body name="quadruped_body">
+            <geom name="base_geom_1" fromto="-0.1761 0.04675 0.05 0.1761 0.04675 0.05"
+                type="capsule" />
+            <geom name="base_geom_2" fromto="-0.1761 -0.04675 0.05 0.1761 -0.04675 0.05"
+                type="capsule" />
+            <geom name="base_geom_3" fromto="-0.1761 0.04675 -0.05 0.1761 0.04675 -0.05"
+                type="capsule" />
+            <geom name="base_geom_4" fromto="-0.1761 -0.04675 -0.05 0.1761 -0.04675 -0.05"
+                type="capsule" />
+            <geom name="base_geom_5" fromto="0.1761 -0.04675 -0.05 0.1761 0.04675 -0.05"
+                type="capsule" />
+            <geom name="base_geom_6" fromto="-0.1761 0.04675 -0.05 -0.1761 -0.04675 -0.05"
+                type="capsule" />
+            <geom name="base_geom_7" fromto="0.1761 -0.04675 0.05 0.1761 0.04675 0.05"
+                type="capsule" />
+            <geom name="base_geom_8" fromto="-0.1761 0.04675 0.05 -0.1761 -0.04675 0.05"
+                type="capsule" />
+            <geom name="base_geom_9" fromto="-0.1761 -0.04675 -0.05 -0.1761 -0.04675 0.05"
+                type="capsule" />
+            <geom name="base_geom_10" fromto="0.1761 -0.04675 -0.05 0.1761 -0.04675 0.05"
+                type="capsule" />
+            <geom name="base_geom_11" fromto="0.1761 0.04675 -0.05 0.1761 0.04675 0.05"
+                type="capsule" />
+            <geom name="base_geom_12" fromto="-0.1761 0.04675 -0.05 -0.1761 0.04675 0.05"
+                type="capsule" />
+            <geom name="body_collider" contype="0" conaffinity="0"
+                group="5"
+                type="capsule" size="0.04" fromto="-0.1761 0.0 -0.05 0.1761 0.0 -0.05"
+                mass="0" />
+            <geom name="battery" class="battery" size="0.05 0.03475 0.038" pos="0.0 0.0 0" />
+
+            <site name="FL:flipped_left_leg_mount" pos="0.1761 0.06 -0.082" euler="0 0 -0.5" />
+
+            <site name="FR:flipped_right_leg_mount" pos="0.1761 -0.06 -0.082" euler="0 0 0.5" />
+
+            <site name="RL:flipped_left_leg_mount" pos="-0.1761 0.06 -0.082" euler="0 0 0.5" />
+
+            <site name="RR:flipped_right_leg_mount" pos="-0.1761 -0.06 -0.082" euler="0 0 -0.5" />
+
+            <site name="arx5|rail_mount" />
+        </body>
+    </worldbody>
+
+    <keyframe>
+        <key name="home" qpos="-0.5 0 0.25 1 0 0 0" />
+        <key name="penalty_default_qpos_weight" qpos="0 0 0 0 0 0 0" />
+    </keyframe>
+
+    <custom>
+        <numeric name="arx5@arx5_base_link\body\pos\0\range\y" size='2' data='-0.2 0.2' />
+        <numeric name="battery\geom\pos\0\range\y" size='2' data='-0.2 0.2' />
+        <numeric name="base_geom_1\geom\fromto\3\range\y" size='2' data='0.05 0.25' />
+        <text name="scale_base_length"
+            data="base_geom_1\geom\fromto\3\range\y;base_geom_1\geom\fromto\0\range\-y;base_geom_2\geom\fromto\3\range\y;base_geom_2\geom\fromto\0\range\-y;base_geom_3\geom\fromto\3\range\y;base_geom_3\geom\fromto\0\range\-y;base_geom_4\geom\fromto\3\range\y;base_geom_4\geom\fromto\0\range\-y;base_geom_5\geom\fromto\3\range\y;base_geom_5\geom\fromto\0\range\y;base_geom_6\geom\fromto\3\range\-y;base_geom_6\geom\fromto\0\range\-y;base_geom_7\geom\fromto\3\range\y;base_geom_7\geom\fromto\0\range\y;base_geom_8\geom\fromto\3\range\-y;base_geom_8\geom\fromto\0\range\-y;base_geom_9\geom\fromto\0\range\-y;base_geom_9\geom\fromto\3\range\-y;base_geom_10\geom\fromto\0\range\y;base_geom_10\geom\fromto\3\range\y;base_geom_11\geom\fromto\0\range\y;base_geom_11\geom\fromto\3\range\y;base_geom_12\geom\fromto\0\range\-y;base_geom_12\geom\fromto\3\range\-y;body_collider\geom\fromto\3\range\y;body_collider\geom\fromto\0\range\-y;left_leg@left_leg\body\pos\0\range\y-0.1761;right_leg@right_leg\body\pos\0\range\y-0.1761;left_leg_1@left_leg\body\pos\0\range\-y+0.1761;right_leg_1@right_leg\body\pos\0\range\-y+0.1761;battery\geom\pos\0\range\max(min(x,y-0.05),-y+0.05);arx5@arx5_base_link\body\pos\0\range\max(min(x,y-0.028),-y+0.028)"
+        />
+
+        <numeric name="left_leg@calf\body\pos\1\range\y" size='2' data='0.08 0.25' />
+        <text name="front_thigh_length"
+            data="left_leg@calf\body\pos\1\range\y;left_leg@thigh_geom_1\geom\fromto\4\range\y;left_leg@thigh_geom_2\geom\fromto\4\range\y;left_leg@thigh_geom_3\geom\fromto\4\range\y;right_leg@calf\body\pos\1\range\y;right_leg@thigh_geom_2\geom\fromto\4\range\y;right_leg@thigh_geom_1\geom\fromto\4\range\y;right_leg@thigh_geom_3\geom\fromto\4\range\y"
+        />
+
+        <numeric name="left_leg_1@calf\body\pos\1\range\y" size='2' data='0.08 0.25' />
+        <text name="rear_thigh_length"
+            data="left_leg_1@calf\body\pos\1\range\y;left_leg_1@thigh_geom_1\geom\fromto\4\range\y;left_leg_1@thigh_geom_2\geom\fromto\4\range\y;left_leg_1@thigh_geom_3\geom\fromto\4\range\y;right_leg_1@calf\body\pos\1\range\y;right_leg_1@thigh_geom_2\geom\fromto\4\range\y;right_leg_1@thigh_geom_1\geom\fromto\4\range\y;right_leg_1@thigh_geom_3\geom\fromto\4\range\y"
+        />
+
+        <numeric name="right_leg@calf_geom\geom\fromto\5\range\y" size='2' data='-0.15 -0.3' />
+
+        <text name="front_calf"
+            data="right_leg@calf_geom\geom\fromto\5\range\y;right_leg@foot\body\pos\2\range\y;left_leg@calf_geom\geom\fromto\5\range\y;left_leg@foot\body\pos\2\range\y"
+        />
+
+
+        <numeric name="right_leg_1@calf_geom\geom\fromto\5\range\y" size='2' data='-0.15 -0.3' />
+
+        <text name="rear_calf"
+            data="right_leg_1@calf_geom\geom\fromto\5\range\y;right_leg_1@foot\body\pos\2\range\y;left_leg_1@calf_geom\geom\fromto\5\range\y;left_leg_1@foot\body\pos\2\range\y"
+        />
+
+    </custom>
+</mujoco>

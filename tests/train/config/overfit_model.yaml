@@ -1,0 +1,96 @@
+seq_len:
+  test_seq_len: 1
+
+model:
+  _target_: t2.model.t2.T2
+  pos_embs:
+    test_pos_idx:
+      _target_: torch.nn.Embedding
+      num_embeddings: ${seq_len.test_seq_len}
+      embedding_dim: ${model.backbone.hidden_dim}
+  backbone:
+    _target_: t2.model.core.DiT
+    hidden_dim: 64
+    depth: 4
+    num_heads: 4
+    mlp_ratio: 4
+  tasks:
+    test_task:
+      _target_: t2.model.task.task.MultiModalDiffusionTask
+      use_flash_attn: false
+      num_eval_seeds: 3
+      timestep_mode: condition
+      num_inference_steps: ${.noise_scheduler.num_train_timesteps}
+      hidden_dim: ${model.backbone.hidden_dim}
+      adapters:
+        test_adapter:
+          _target_: t2.model.modality.DiffusionModalityAdapter
+          attrs_noise_probs:
+            test_attr_2: 0.0 # don't noise the second attribute
+          default_diffuse_prob: 1.0 # always diffuse
+          only_use_mask_for_padding: false
+          hidden_dim: ${model.backbone.hidden_dim}
+          loss_fn:
+            _target_: torch.nn.functional.mse_loss
+            reduction: none
+            _partial_: true
+          modality:
+            _target_: t2.model.modality.Modality
+            id_attrs:
+              - test_pos_idx/id
+            pad_value: -1.0
+            name: test_modality
+            attrs:
+              test_attr_1: 1
+              test_attr_2: 1
+            max_seq_len: ${seq_len.test_seq_len}
+            attr_norms:
+              _target_: torch.nn.ModuleDict
+              modules:
+                /test_attr_1:
+                  _target_: t2.data.normalization.Normalization
+                  quantiles:
+                    q0/0:
+                      _target_: torch.Tensor
+                      data: [-100.0]
+                    q1/0:
+                      _target_: torch.Tensor
+                      data: [-1.0]
+                    q99/0:
+                      _target_: torch.Tensor
+                      data: [1.0]
+                    q100/0:
+                      _target_: torch.Tensor
+                      data: [100.0]
+                  clip: true
+                /test_attr_2:
+                  _target_: t2.data.normalization.Normalization
+                  quantiles:
+                    q0/0:
+                      _target_: torch.Tensor
+                      data: [-50.0]
+                    q1/0:
+                      _target_: torch.Tensor
+                      data: [-1.0]
+                    q99/0:
+                      _target_: torch.Tensor
+                      data: [1.0]
+                    q100/0:
+                      _target_: torch.Tensor
+                      data: [10.0]
+                  clip: true
+          attr_encoders: {}
+          attr_decoders: {}
+          loss_weight: 1.0
+      noise_scheduler:
+        _target_: diffusers.schedulers.DDIMScheduler
+        num_train_timesteps: 100
+
+optimizer:
+  _target_: torch.optim.AdamW
+  lr: 1e-4
+  weight_decay: 0
+lr_scheduler:
+  _target_: transformers.get_scheduler
+  name: cosine
+  num_warmup_steps: 500

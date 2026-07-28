@@ -1,0 +1,15 @@
+defaults:
+  - /runner: base
+  - _self_
+
+_partial_: true
+_target_: t2.eval.ctrl.evaluate_policy
+policy: ???
+seq_len_cfg: ${datasets.ctrl_rand.dataset.group_seq_lens}
+num_processes: 50
+use_pbar: true
+num_policies_per_gpu: 1
+policy_server_kwargs:
+  batch_size: 50
+  group_time_offsets: {}
+  use_inference_mode: true

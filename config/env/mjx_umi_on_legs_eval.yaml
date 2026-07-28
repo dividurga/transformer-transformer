@@ -1,0 +1,19 @@
+defaults:
+  - mjx_umi_on_legs
+  - _self_
+
+trajectory_file: ???
+velocity_kick: [0.0, 0.0]
+reset_xy_pos: 0.0
+reset_z_angle: 0.0
+reset_qvel: 0.0
+reset_qpos: 0.0
+randomize_target_z_pos: [0.0, 0.0]
+
+transport_interval: -1
+
+# don't terminate if too high error
+termination_pos_err_threshold: 100
+termination_orn_err_threshold: 100
+termination_pose_consecutive_steps: ${.max_episode_length}
+terminate_on_bad_contact: false

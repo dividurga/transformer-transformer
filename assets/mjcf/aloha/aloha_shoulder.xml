@@ -1,0 +1,48 @@
+<mujoco model="aloha_shoulder">
+    <compiler angle="radian" meshdir="assets" autolimits="true" />
+
+    <asset>
+        <!-- <mesh file="vx300s_2_shoulder.stl" scale="0.001 0.001 0.001" /> -->
+        <mesh file="vx300s_2_shoulder_motor_only.stl" scale="1 1 1" />
+    </asset>
+
+    <default>
+        <default class="vx300s">
+            <joint axis="0 1 0" actuatorfrcrange="-35 35" actuatorgravcomp="true" />
+            <!-- group 4 means not a tracking site -->
+            <site group="4" />
+            <default class="waist">
+                <position ctrlrange="-3.14158 3.14158" kp="43" forcerange="-35 35" />
+            </default>
+            <default class="visual">
+                <geom type="mesh" mass="0" group="2" contype="0" conaffinity="0" />
+            </default>
+            <default class="collision">
+                <geom group="3" type="mesh" condim="6" friction="1 5e-3 5e-4" solref=".01 1" />
+            </default>
+        </default>
+    </default>
+
+    <worldbody>
+        <body name="shoulder_link" childclass="vx300s">
+            <joint name="waist" axis="0 0 1" range="-3.14158 3.14158" damping="5.76" />
+            <geom pos="0 0 -0.003" quat="1 0 0 1" class="visual" mesh="vx300s_2_shoulder_motor_only"
+                name="shoulder_motor_visual" />
+            <geom pos="0.0005 0 0.032" rgba='1 0 0 1' type="box" size="0.016 0.044 0.029"
+                class="collision" mass="0.798614" name="shoulder_motor_collision" />
+            <site name="upper_arm_mount" pos="0 0 0.04805" />
+        </body>
+    </worldbody>
+
+    <custom>
+        <!-- <numeric name="shoulder_motor_visual\geom\pos\2\range\x+y" size='2' data='0.00 0.05' />
+        <text name="move_mounting_site_with_visual"
+        data="shoulder_motor_visual\geom\pos\2\range\x+y;upper_arm_mount\site\pos\2\range\x+y;shoulder_motor_collision\geom\pos\2\range\x+y"
+        /> -->
+
+        <tuple name="actuators">
+            <element objtype="joint" objname="waist" />
+        </tuple>
+    </custom>
+
+</mujoco>

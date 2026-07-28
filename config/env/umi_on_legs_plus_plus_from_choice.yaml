@@ -1,0 +1,8 @@
+defaults:
+  - umi_on_legs
+  - _self_
+robot_generator:
+  _target_: t2.robogen.umi_on_legs_plus_plus.umi_on_legs_plus_plus_from_choices
+  choices: ???
+  num_uniforms: ???
+  _partial_: true

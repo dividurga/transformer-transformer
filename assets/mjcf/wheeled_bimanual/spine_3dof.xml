@@ -1,0 +1,74 @@
+<mujoco model="spine_3dof">
+    <include file="defaults.xml" />
+
+    <worldbody>
+        <body name="spine_base" pos="0 0 0">
+            <!-- Base pitch motor - gray cylinder on wheeled base -->
+            <geom name="spine_pitch1_motor" type="cylinder" size="0.06 0.04"
+                pos="0 0 0.04" euler="1.5708 0 0" rgba="0.75 0.75 0.75 1" density="2000" />
+            <joint name="spine_pitch_1" type="hinge" axis="0 1 0"
+                range="-1.5708 1.5708" damping="200" armature="10.0" />
+
+            <!-- First link segment - white/cream capsule going up/forward -->
+            <geom name="spine_link1" type="capsule" size="0.045"
+                fromto="0 0 0.08 0 0 0.22" rgba="0.97 0.95 0.93 1" density="400" />
+
+            <!-- Second pitch link body -->
+            <body name="spine_pitch2_link" pos="0 0 0.26">
+                <!-- Second pitch motor - gray, rotated for Y-axis pitch -->
+                <geom name="spine_pitch2_motor" type="cylinder" size="0.055 0.035"
+                    pos="0 0 0" euler="1.5708 0 0" rgba="0.75 0.75 0.75 1" density="2000" />
+                <joint name="spine_pitch_2" type="hinge" axis="0 1 0"
+                    range="-2.0944 2.0944" damping="200" armature="10.0" />
+
+                <!-- Second link segment - white/cream, going up -->
+                <geom name="spine_link2" type="capsule" size="0.042"
+                    fromto="0 0 0.04 0 0 0.18" rgba="0.97 0.95 0.93 1" density="400" />
+
+                <!-- Third pitch joint body -->
+                <body name="spine_pitch3_link" pos="0 0 0.22">
+                    <!-- Third pitch motor - gray -->
+                    <geom name="spine_pitch3_motor" type="cylinder" size="0.045 0.025"
+                        pos="0 0 0" euler="1.5708 0 0" rgba="0.75 0.75 0.75 1" density="2000" />
+                    <joint name="spine_pitch_3" type="hinge" axis="0 1 0"
+                        range="-1.5708 1.5708" damping="200" armature="10.0" />
+
+                    <!-- Torso mount site at top -->
+                    <site name="torso_mount" pos="0 0 0.05" />
+                </body>
+            </body>
+        </body>
+    </worldbody>
+
+    <keyframe>
+        <!-- Home pose: bent S-curve position like reference images -->
+        <!-- pitch_1 forward, pitch_2 back, pitch_3 forward to keep torso upright -->
+        <key name="home" qpos="-1.0 2.0 -1.0" ctrl="-1.0 2.0 -1.0" />
+        <key name="penalty_default_qpos_weight" qpos="20 10 10" />
+        <key name="mink_damping_scale" qpos="100 100 100" />
+    </keyframe>
+
+    <actuator>
+        <!-- First pitch - needs to support entire upper body weight, highest load -->
+        <position name="spine_pitch_1" joint="spine_pitch_1" kp="5000" kv="500"
+            forcerange="-600 600" ctrlrange="-1.5708 1.5708" />
+        <!-- Second pitch - moderate load -->
+        <position name="spine_pitch_2" joint="spine_pitch_2" kp="2000" kv="200"
+            forcerange="-400 400" ctrlrange="-2.0944 2.0944" />
+        <!-- Third pitch - lighter load -->
+        <position name="spine_pitch_3" joint="spine_pitch_3" kp="2000" kv="200"
+            forcerange="-300 300" ctrlrange="-1.5708 1.5708" />
+    </actuator>
+
+    <custom>
+        <!-- Link 1 length variation (14-24cm) -->
+        <numeric name="spine_link1\geom\fromto\5\range\y" size='2' data='0.10 0.40' />
+        <text name="spine_link1_length"
+            data="spine_link1\geom\fromto\5\range\y;spine_pitch2_link\body\pos\2\range\y+0.04" />
+
+        <!-- Link 2 length variation (12-20cm) -->
+        <numeric name="spine_link2\geom\fromto\5\range\y" size='2' data='0.10 0.40' />
+        <text name="spine_link2_length"
+            data="spine_link2\geom\fromto\5\range\y;spine_pitch3_link\body\pos\2\range\y+0.04" />
+    </custom>
+</mujoco>

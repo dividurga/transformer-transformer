@@ -1,0 +1,23 @@
+# ⚠️ Fixed-base bimanual arms ONLY (e.g. the ALOHA design space).
+# Despite the name, this is NOT the runner for the `wheeled_bimanual` design
+# space — composing it there silently produces a broken rollout (the base
+# never moves). Use runner `wheeled_bimanual_mink` for the wheeled robot.
+defaults:
+  - base
+
+_target_: t2.env.bimanual_mink_runner.BimanualMinkEnvRunner
+look_ahead_steps: 4
+mink_solver: "daqp"
+mink_max_iters: 20
+mink_reset_max_iters: 50
+mink_pos_threshold: 1e-3
+mink_ori_threshold: 1e-3
+
+mink_pos_cost: 1.0
+mink_ori_cost: 1.0
+mink_lm_damping: 1.0
+mink_posture_cost: 1e-4
+
+qpos_noise: 0.0
+
+randomize_default_posture: false

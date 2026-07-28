@@ -1,0 +1,4 @@
+defaults:
+  - dyna_joint
+  - diffuse
+  - _self_

@@ -1,0 +1,11 @@
+.venv/
+blender_renders/
+wandb/
+outputs/
+*.gif
+*.zarr
+*.pkl
+data/
+test_*.zarr/
+.pytest_cache/
+.ruff_cache/

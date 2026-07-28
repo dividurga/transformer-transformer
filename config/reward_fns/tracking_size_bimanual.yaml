@@ -1,0 +1,16 @@
+regularized_tracking_error:
+  _target_: t2.eval.diffusion_guidance.RegularizedExpTrackingError
+  pose_weight: 1.0
+  pos_sigma: 0.01
+  orn_sigma: 0.5
+  power: 2
+  torque_weight: 0.0
+  velocity_weight: 0.0
+  leaky_clip_slope: 0.0
+minimize_size:
+  _target_: t2.eval.diffusion_guidance.MinimizeSize
+  # values for bimanual
+  weight: 0.1
+  target_dimension: 5.0
+  power: 1
+  multiply_by_timesteps: true

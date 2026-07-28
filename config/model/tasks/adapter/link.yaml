@@ -1,0 +1,55 @@
+defaults:
+  - base
+  - _self_
+modality:
+  name: link
+  max_seq_len: ${seq_len.link}
+  id_attrs:
+    - id
+  attrs:
+    geom_type: ${dims.geom_type_bits}
+    geom_size: 3
+    mass: 1
+    ipos: 3
+    imat: 9
+    diaginertia: 3
+    friction: 3
+    contact_dim: ${dims.contact_dim_bits}
+    rgba: 4
+attr_encoders:
+  contact_dim:
+    _target_: t2.model.encoding.BinaryEncoding
+    num_bits: ${dims.contact_dim_bits}
+  geom_type:
+    _target_: t2.model.encoding.BinaryEncoding
+    num_bits: ${dims.geom_type_bits}
+  # free_link/id == -1 means not a free link
+  free_link/id:
+    _target_: t2.model.encoding.BinaryEncoding
+    num_bits: ${dims.free_link_id_bits}
+    offset: 1
+  # track_link/id == -1 means not a track link
+  track_link/id:
+    _target_: t2.model.encoding.BinaryEncoding
+    num_bits: ${dims.track_link_id_bits}
+    offset: 1
+attr_decoders:
+  contact_dim:
+    _target_: t2.model.encoding.BinaryDecoding
+    num_bits: ${dims.contact_dim_bits}
+  geom_type:
+    _target_: t2.model.encoding.BinaryDecoding
+    num_bits: ${dims.geom_type_bits}
+  # free_link/id == -1 means not a free link
+  free_link/id:
+    _target_: t2.model.encoding.BinaryDecoding
+    num_bits: ${dims.free_link_id_bits}
+    offset: -1
+  # track_link/id == -1 means not a track link
+  track_link/id:
+    _target_: t2.model.encoding.BinaryDecoding
+    num_bits: ${dims.track_link_id_bits}
+    offset: -1
+  imat:
+    _target_: t2.model.utils.process_rotmat
+    _partial_: True

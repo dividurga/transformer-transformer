@@ -1,0 +1,4 @@
+defaults:
+  - pose
+  - diffuse
+  - _self_

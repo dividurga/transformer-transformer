@@ -1,0 +1,4 @@
+defaults:
+  - link_log
+  - diffuse
+  - _self_

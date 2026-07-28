@@ -1,0 +1,38 @@
+defaults:
+  - evaluate_hardware_opt_multi_traj
+  - override /runner@eval_fn.runner: wheeled_bimanual_mink
+  - override /env@eval_fn.runner.env: wheeled_bimanual
+  - _self_
+
+pickle_path: data/bimanual_dish_washing_test.pkl
+eval_fn:
+  traj_indices:
+    # 26 test trajectories in bimanual dish washing test set
+    - [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+      ]

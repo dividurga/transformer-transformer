@@ -1,0 +1,39 @@
+<mujoco model="spine_fixed">
+    <include file="defaults.xml" />
+
+    <worldbody>
+        <body name="spine_base" pos="0 0 0">
+            <!-- Fixed spine column - hollow with 4 thin walls -->
+            <!-- Base height: 0.3m (varies 0.3-0.7m via procedural variation) -->
+            <!-- Outer half-size: 0.045, wall thickness: 0.003, inner clearance: 0.039 -->
+            <geom name="spine_front" class="body_panel" type="box"
+                size="0.045 0.003 0.15" pos="0 0.042 0.15" friction="0 0 0" condim="1" />
+            <geom name="spine_back" class="body_panel" type="box"
+                size="0.045 0.003 0.15" pos="0 -0.042 0.15" friction="0 0 0" condim="1" />
+            <geom name="spine_left" class="body_panel" type="box"
+                size="0.003 0.039 0.15" pos="-0.042 0 0.15" friction="0 0 0" condim="1" />
+            <geom name="spine_right" class="body_panel" type="box"
+                size="0.003 0.039 0.15" pos="0.042 0 0.15" friction="0 0 0" condim="1" />
+
+            <!-- Torso mount site at top of spine column -->
+            <!-- Only "torso" variant mountable (no torso_lean) -->
+            <site name="torso|torso_lean_mount" pos="0 0 0.30" />
+        </body>
+    </worldbody>
+
+    <keyframe>
+        <!-- No joints, so empty qpos/ctrl -->
+        <key name="home" qpos="" ctrl="" />
+        <key name="penalty_default_qpos_weight" qpos="" />
+        <key name="mink_damping_scale" qpos="" />
+    </keyframe>
+
+    <custom>
+        <!-- Spine height variation (0.3-0.7m total height) -->
+        <!-- Driver: torso mount site Z position = total height -->
+        <numeric name="torso_mount\site\pos\2\range\y" size='2' data='0.30 0.70' />
+        <!-- Correlated: all geom size[2] and pos[2] scale as height/2 -->
+        <text name="spine_height"
+            data="torso_mount\site\pos\2\range\y;spine_front\geom\size\2\range\y*0.5;spine_back\geom\size\2\range\y*0.5;spine_left\geom\size\2\range\y*0.5;spine_right\geom\size\2\range\y*0.5;spine_front\geom\pos\2\range\y*0.5;spine_back\geom\pos\2\range\y*0.5;spine_left\geom\pos\2\range\y*0.5;spine_right\geom\pos\2\range\y*0.5" />
+    </custom>
+</mujoco>

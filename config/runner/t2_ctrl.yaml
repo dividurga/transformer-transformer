@@ -1,0 +1,25 @@
+defaults:
+  - base
+
+_target_: t2.env.t2_ctrl_runner.T2CtrlEnvRunner
+
+# Path to a trained T2 checkpoint (.pt) for the ctrl task.
+ckpt_path: ${ckpt_path}
+
+# T2 inference options (mirrors `scripts/evaluate_ctrl.py` / `t2.model.t2.setup_decoder`).
+task_name: ctrl
+device: cuda # {auto,cpu,cuda}
+num_inference_steps: null
+num_repeats_per_step: 1
+clip_samples_in_guidance: true
+deterministic: false
+use_flash_attn: true
+use_torch_compile: true
+use_mixed_precision: true
+eta: 0.0
+
+# Optional runtime noise (matches other runners' semantics).
+qpos_noise: 0.0
+
+# Optional overrides for time offsets used by `t2.eval.ctrl.env_obs_to_batch`.
+group_time_offsets: {}

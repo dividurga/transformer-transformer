@@ -1,0 +1,15 @@
+regularized_tracking_error:
+  _target_: t2.eval.diffusion_guidance.RegularizedExpTrackingError
+  pose_weight: 1.0
+  pos_sigma: 0.01
+  orn_sigma: 0.5
+  power: 2
+  torque_weight: 0.0
+  velocity_weight: 0.0
+  leaky_clip_slope: 0.0
+minimize_weight:
+  _target_: t2.eval.diffusion_guidance.MinimizeWeight
+  weight: 10 # good value for viperx space
+  power: 1
+  target_weight: 3.2 # good value for viperx space, which usually just varies between 3.0 and 3.5 kg (heavy base but isn't part of optimization)
+  multiply_by_timesteps: true

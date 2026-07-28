@@ -1,0 +1,8 @@
+defaults:
+  - wheeled_bimanual
+  - _self_
+robot_generator:
+  _target_: t2.robogen.wheeled_bimanual.wheeled_bimanual_from_choices
+  choices: [0, 1]
+  num_uniforms: 11
+  _partial_: true

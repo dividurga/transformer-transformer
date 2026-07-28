@@ -1,0 +1,50 @@
+<mujoco model="aloha_upper_forearm">
+    <compiler angle="radian" meshdir="assets" autolimits="true" />
+
+    <default>
+        <default class="vx300s">
+            <joint actuatorgravcomp="true" />
+            <!-- group 4 means not a tracking site -->
+            <site group="4" />
+            <default class="second_elbow">
+                <joint range="-1.57 1.57" armature="0.383" frictionloss="1.15" damping="18.49"
+                    actuatorfrcrange="-59 59" />
+                <position ctrlrange="-1.57 1.57" kp="227" forcerange="-59 59" />
+            </default>
+            <default class="visual">
+                <geom type="mesh" mass="0" group="2" contype="0" conaffinity="0" />
+            </default>
+            <default class="collision">
+                <geom group="3" type="mesh" condim="6" friction="1 5e-3 5e-4" solref=".01 1" />
+            </default>
+        </default>
+    </default>
+
+    <worldbody>
+        <body name="upper_forearm_link" childclass="vx300s" pos="0.0 0 0">
+            <geom pos="0.016 0 0.0005 " rgba='1 0 0 1' type="box"
+                size="0.021 0.021 0.021"
+                class="collision" mass="0" name="upper_forearm_link_connector" />
+            <geom type="box" size="0.077 0.02 0.01" pos="0.115 0 0" density="100"
+                rgba="0.2 0.8 0.4 1" name="upper_forearm_extension" class="collision" />
+            <joint name="second_elbow" class="second_elbow" axis="1 0 0" />
+            <site name="lower_forearm_mount" pos="0.2 0 0" euler="0 0 0" />
+        </body>
+    </worldbody>
+
+    <custom>
+        <numeric name="upper_forearm_extension\geom\size\0\range\x+y" size='2'
+            data='-0.03 0.20' />
+        <text name="upper_forearm_extension_size"
+            data="upper_forearm_extension\geom\size\0\range\x+y" />
+
+        <text name="shift_pos_with_extension_upper_forearm"
+            data="upper_forearm_extension\geom\size\0\range\x+y;upper_forearm_extension\geom\pos\0\range\x+y;lower_forearm_mount\site\pos\0\range\x+y*2"
+        />
+        <numeric name="second_elbow\joint\axis\:\choice\y" size='9' data='1 0 0 0 1 0 0 0 1' />
+
+        <tuple name="actuators">
+            <element objtype="joint" objname="second_elbow" />
+        </tuple>
+    </custom>
+</mujoco>

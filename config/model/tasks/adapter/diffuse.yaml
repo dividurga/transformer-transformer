@@ -1,0 +1,8 @@
+_target_: t2.model.modality.DiffusionModalityAdapter
+attrs_noise_probs: {}
+dont_noise_timesteps: null
+default_diffuse_prob: 1.0 # always diffuse
+loss_fn:
+  _target_: torch.nn.functional.mse_loss
+  reduction: none
+  _partial_: true

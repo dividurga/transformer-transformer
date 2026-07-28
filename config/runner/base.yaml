@@ -1,0 +1,6 @@
+_target_: t2.env.runner.EnvRunner
+log_dir: null
+render: false
+render_fps: 24
+use_gui: false
+dump_hardware_every_episode: false

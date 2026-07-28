@@ -1,0 +1,9 @@
+regularized_tracking_error:
+  _target_: t2.eval.diffusion_guidance.RegularizedExpTrackingError
+  pose_weight: 1.0
+  pos_sigma: 0.01
+  orn_sigma: 0.5
+  power: 2
+  torque_weight: 0.0
+  velocity_weight: 0.1 # good value for viperx space
+  leaky_clip_slope: 0.0

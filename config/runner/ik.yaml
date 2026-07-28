@@ -1,0 +1,13 @@
+defaults:
+  - base
+_target_:
+  t2.env.ik_runner.IKEnvRunner
+  # make sure this matches `target_traj_indices` in the environment config
+look_ahead_steps: 3
+ik_gamma: 1.0
+qpos_noise: 0.0
+pos_noise: 0.0
+orn_noise: 0.0
+ik_max_attempts: 1
+ik_max_steps: 10
+local_frame_perturb: true

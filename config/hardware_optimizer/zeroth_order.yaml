@@ -1,0 +1,6 @@
+_partial_: true
+_target_: t2.eval.diffusion_guidance.HardwareOptimizer
+hardware_generator: ???
+num_seeds: 64
+batch_size: ${.num_seeds}
+output_cache_dir: null

@@ -1,0 +1,61 @@
+<mujoco model="aloha_upper_forearm">
+    <compiler angle="radian" meshdir="assets" autolimits="true" />
+
+    <asset>
+        <mesh file="custom_vx300s_3_upper_forearm_part1.stl" />
+        <mesh file="custom_vx300s_3_upper_forearm_part2.stl" />
+    </asset>
+
+    <default>
+        <default class="vx300s">
+            <joint axis="0 1 0" actuatorfrcrange="-35 35" actuatorgravcomp="true" />
+            <!-- group 4 means not a tracking site -->
+            <site group="4" />
+            <default class="elbow">
+                <joint range="-1.76278 1.6057" armature="0.383" frictionloss="1.15" damping="18.49"
+                    actuatorfrcrange="-59 59" />
+                <position ctrlrange="-1.76278 1.6057" kp="227" forcerange="-59 59" />
+            </default>
+            <default class="visual">
+                <geom type="mesh" mass="0" group="2" contype="0" conaffinity="0" />
+            </default>
+            <default class="collision">
+                <geom group="3" type="mesh" condim="6" friction="1 5e-3 5e-4" solref=".01 1" />
+            </default>
+        </default>
+    </default>
+
+    <worldbody>
+        <body name="upper_forearm_link" childclass="vx300s">
+            <geom pos="0.045 0 0.0005 " rgba='1 0 0 1' type="box"
+                size="0.017 0.05 0.015"
+                class="collision" mass="0" name="upper_forearm_link_connector" />
+            <joint name="elbow" class="elbow" />
+            <geom class="visual" mesh="custom_vx300s_3_upper_forearm_part1" mass="0.05" />
+            <geom type="box" size="0.064685 0.02 0.01" pos="0.128684 0 0" density="100"
+                rgba="0.2 0.8 0.4 1" name="upper_forearm_extension" class="collision" />
+            <geom type="box" size="0.064685 0.02 0.01" pos="0.128684 0 0" density="100"
+                name="upper_forearm_extension_visual" class="visual" />
+            <geom class="visual" mesh="custom_vx300s_3_upper_forearm_part2"
+                name="upper_forearm_connector" mass="0.05" pos="0.0 0 0.0" />
+            <site name="lower_forearm|second_upper_forearm|wrist_link_mount" pos="0.2 0 0"
+                euler="0 0 0"
+            />
+        </body>
+    </worldbody>
+
+    <custom>
+        <numeric name="upper_forearm_extension\geom\size\0\range\x+y" size='2'
+            data='-0.03 0.20' />
+        <text name="upper_forearm_extension_size"
+            data="upper_forearm_extension\geom\size\0\range\x+y;upper_forearm_extension_visual\geom\size\0\range\x+y" />
+
+        <text name="shift_pos_with_extension_upper_forearm"
+            data="upper_forearm_extension\geom\size\0\range\x+y;upper_forearm_extension\geom\pos\0\range\x+y;upper_forearm_extension_visual\geom\pos\0\range\x+y;upper_forearm_connector\geom\pos\0\range\x+y*2;lower_forearm|second_upper_forearm|wrist_link_mount\site\pos\0\range\x+y*2"
+        />
+
+        <tuple name="actuators">
+            <element objtype="joint" objname="elbow" />
+        </tuple>
+    </custom>
+</mujoco>

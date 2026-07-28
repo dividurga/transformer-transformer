@@ -1,0 +1,80 @@
+# from hardware, past state and ctrl goal, predict target ctrl
+# doesn't include free link observations, and doesn't condition on past control
+# suitable for distillation from IK/Mink
+defaults:
+  # input trajectory
+  - adapter@adapters.ctrl_goal: pose
+  # input hardware
+  - adapter@adapters.link: link
+  - adapter@adapters.dyna_joint: dyna_joint
+  - adapter@adapters.fixed_joint: fixed_joint
+  - adapter@adapters.actuator: actuator
+  # input state
+  - adapter@adapters.track_link_obs: pose
+  - adapter@adapters.dyna_joint_obs: qpos
+  # output control
+  - adapter@adapters.ctrl: pos_ctrl_diffuse
+  # adapter params
+  - diffusion_task
+  - _self_
+adapters:
+  # no loss for inputs
+  ctrl_goal:
+    loss_weight: 0.0
+    modality:
+      id_attrs:
+        - time/id
+        - track_link/id
+      name: target_pose
+      max_seq_len: ${eval:"${ctrl_seq_len.target_pose}*${ctrl_seq_len.rollout_steps}"}
+  link:
+    loss_weight: 0.0
+    modality:
+      id_attrs:
+        - id
+        - track_link/id
+  dyna_joint:
+    loss_weight: 0.0
+    modality:
+      id_attrs:
+        - id
+        - link/id
+  fixed_joint:
+    loss_weight: 0.0
+    modality:
+      id_attrs:
+        - id
+        - link/id
+  actuator:
+    loss_weight: 0.0
+    modality:
+      id_attrs:
+        - id
+        - dyna_joint/id
+  track_link_obs:
+    loss_weight: 0.0
+    modality:
+      id_attrs:
+        - time/id
+        - track_link/id
+      name: track_link_obs
+      max_seq_len: ${eval:"${ctrl_seq_len.track_link_obs}*${ctrl_seq_len.rollout_steps}"}
+  dyna_joint_obs:
+    loss_weight: 0.0
+    modality:
+      attrs:
+        qpos: 1
+        qvel: 1
+      id_attrs:
+        - time/id
+        - dyna_joint/id
+      name: dyna_joint_obs
+      max_seq_len: ${eval:"${ctrl_seq_len.dyna_joint_obs}*${ctrl_seq_len.rollout_steps}"}
+  # loss weight > 0 for outputs
+  ctrl:
+    loss_weight: 1.0
+    modality:
+      id_attrs:
+        - actuator/id
+        - time/id
+      max_seq_len: ${eval:"${ctrl_seq_len.actuator}*${ctrl_seq_len.rollout_steps}"}

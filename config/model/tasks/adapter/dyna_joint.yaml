@@ -1,0 +1,44 @@
+defaults:
+  - base
+  - _self_
+modality:
+  name: dyna_joint
+  max_seq_len: ${seq_len.dyna_joint}
+  id_attrs:
+    - id
+  attrs:
+    type: ${dims.dyna_joint_type_bits}
+    range: 2
+    armature: 1
+    damping: 1
+    frictionloss: 1
+    stiffness: 1
+    spring_ref: 1
+    qpos0_ref: 1
+    pos: 3
+    rotmat: 9
+  # must include link/id in either id_attrs or attrs
+attr_encoders:
+  # link/id == -1 is `GROUND_LINK_ID`
+  link/id:
+    _target_: t2.model.encoding.BinaryEncoding
+    num_bits: ${dims.link_id_bits}
+    offset: 1
+  type:
+    _target_: t2.model.encoding.BinaryEncoding
+    num_bits: ${dims.dyna_joint_type_bits}
+attr_decoders:
+  # link/id == -1 is `GROUND_LINK_ID`
+  link/id:
+    _target_: t2.model.encoding.BinaryDecoding
+    num_bits: ${dims.link_id_bits}
+    offset: -1
+  type:
+    _target_: t2.model.encoding.BinaryDecoding
+    num_bits: ${dims.dyna_joint_type_bits}
+  pos:
+    _target_: t2.model.utils.clamp_zero
+    _partial_: True
+  rotmat:
+    _target_: t2.model.utils.process_rotmat
+    _partial_: True

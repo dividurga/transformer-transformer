@@ -1,0 +1,17 @@
+defaults:
+  - runner: rl # {ik,rl}
+  - env@runner.env: umi_on_legs # {aloha, umi_on_legs}
+  - override hydra/job_logging: custom
+  - _self_
+
+episode_seed: 0
+num_episodes_per_hardware: 10
+
+hardware_seeds: null
+num_hardware: 1000
+
+num_processes: 16
+num_gpus_per_worker: 0
+
+data_path: ???
+randomized_episode_seeds: true

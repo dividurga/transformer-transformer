@@ -1,0 +1,9 @@
+<mujoco model="aloha_gripper_with_joint_dynamics">
+    <include file="aloha_gripper.xml" />
+
+    <custom>
+        <numeric name="wrist_rotate\joint\damping\0\range\y" size='2' data='0.0 20.0' />
+        <numeric name="wrist_rotate\joint\armature\0\range\y" size='2' data='0.0 0.5' />
+        <numeric name="wrist_rotate\joint\frictionloss\0\range\y" size='2' data='0.0 2.0' />
+    </custom>
+</mujoco>

@@ -1,0 +1,24 @@
+num_inference_steps: null
+num_repeats_per_step: 1
+task_name: ???
+ckpt_path: ???
+batch_size: 128
+num_seeds_per_datapoint: 3
+clip_samples_in_guidance: true
+deterministic: false
+diffusion_guidance: null
+use_flash_attn: true
+# DDIM eta: 0.0 is deterministic sampling, 1.0 is fully stochastic. Every
+# zeroth-order (unguided) result in the paper used 0.0; every Dynamics
+# Self-Guidance result used 1.0, except the ViperX multi-trajectory row, which
+# used 0.9. The paper reports this empirically — stochastic sampling "improved
+# motion-to-robot optimization performance significantly" for DSG, while eta
+# made no difference to the zeroth-order sampler — and offers no mechanism.
+# Guidance is added to the predicted noise and then passed through the
+# scheduler, so it is not gated on the stochastic term; run guided_diffusion at
+# the eta in the table because that is what the reported numbers used, not
+# because eta=0 disables guidance. See the guidance table in
+# docs/visualization.md.
+eta: 0.0
+use_mixed_precision: true
+use_torch_compile: true

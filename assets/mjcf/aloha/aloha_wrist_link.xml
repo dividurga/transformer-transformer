@@ -1,0 +1,49 @@
+<mujoco model="aloha">
+    <compiler angle="radian" meshdir="assets" autolimits="true" />
+
+    <asset>
+        <mesh file="vx300s_6_wrist.stl" scale="0.001 0.001 0.001" />
+    </asset>
+
+    <default>
+        <default class="vx300s">
+            <joint axis="0 1 0" actuatorfrcrange="-35 35" actuatorgravcomp="true" />
+            <!-- group 4 means not a tracking site -->
+            <site group="4" />
+            <default class="wrist_angle">
+                <joint range="-1.8675 2.23402"
+                    actuatorfrcrange="-35 35" />
+                <position ctrlrange="-1.8675 2.23402" kp="37" forcerange="-35 35" />
+            </default>
+            <default class="visual">
+                <geom type="mesh" mass="0" group="2" contype="0" conaffinity="0" />
+            </default>
+            <default class="collision">
+                <geom group="3" type="mesh" condim="6" friction="1 5e-3 5e-4" solref=".01 1" />
+            </default>
+        </default>
+    </default>
+
+    <worldbody>
+        <body name="wrist_link" childclass="vx300s">
+            <inertial pos="0.046743 -7.6652e-06 0.010565"
+                quat="-0.00100191 0.544586 0.0026583 0.8387"
+                mass="0.115395"
+                diaginertia="5.45707e-05 4.63101e-05 4.32692e-05" />
+            <joint name="wrist_angle" class="wrist_angle" armature="0.008" damping="6.28" />
+            <geom quat="1 0 0 1" class="visual" mesh="vx300s_6_wrist" mass="0" />
+            <geom type="box" size="0.0155 0.027 0.02" pos="0.05 0 0.012"
+                rgba="1 0 0 1"
+                mass="0.115395"
+                class="collision" />
+            <site name="gripper_mount" euler="0 1.57 -1.57"
+                pos="0.0 0 0" />
+        </body>
+    </worldbody>
+
+    <custom>
+        <tuple name="actuators">
+            <element objtype="joint" objname="wrist_angle" />
+        </tuple>
+    </custom>
+</mujoco>

@@ -1,0 +1,7 @@
+defaults:
+  - addon_hardware_viperx
+  - model/tasks@model.tasks.hardware_gen: hardware_gen
+  - override model/tasks/adapter@model.tasks.hardware_gen.adapters.link: link_log_diffuse
+  - override model/tasks/adapter@model.tasks.hardware_gen.adapters.dyna_joint: dyna_joint_log_diffuse
+  - override model/tasks/adapter@model.tasks.hardware_gen.adapters.actuator: actuator_log_diffuse
+  - _self_

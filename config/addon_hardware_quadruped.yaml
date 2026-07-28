@@ -1,0 +1,127 @@
+defaults:
+  - dataset@datasets.clean.dataset: base
+  - _self_
+  # no hardware opt eval for quadruped
+
+hardware_dataset_path: ???
+
+model:
+  pos_embs:
+    order:
+      _target_: torch.nn.Embedding
+      num_embeddings: 2
+      embedding_dim: ${model.backbone.hidden_dim}
+    free_link:
+      _target_: t2.model.encoding.OffsettedEmbedding
+      embedding:
+        _target_: torch.nn.Embedding
+        num_embeddings: ${eval:"${seq_len.free_link} + 1"}
+        embedding_dim: ${model.backbone.hidden_dim}
+      offset: 1 # not a free link is -1
+  tasks:
+    hardware_gen:
+      adapters:
+        free_link_obs:
+          loss_weight: 1.0
+          only_use_mask_for_padding: true
+          modality:
+            name: free_link_obs
+            id_attrs:
+              - time/id
+              - free_link/id
+            max_seq_len: ${eval:"${seq_len.free_link_obs}*${seq_len.rollout_steps}"}
+        link:
+          modality:
+            attrs:
+              # explicitly diffuse out free_link/id in binary format
+              free_link/id: ${dims.free_link_id_bits} # binary
+
+hardware_pos_seq_lens: &hardware_pos_seq_lens
+  dyna_joint:
+    - ${eval:"int(${seq_len.dyna_joint}//2)"}
+    - 0
+    - 1
+    - 2
+  fixed_joint:
+    - ${eval:"int(${seq_len.fixed_joint}//2)"}
+    - 0
+    - 1
+    - 2
+  link:
+    - ${seq_len.link}
+    - 0
+    - 1
+    - 1
+  actuator:
+    - ${seq_len.actuator}
+    - 0
+    - 1
+    - 1
+  # all obs are scaled by rollout_steps
+  track_link_obs/track_link:
+    - ${seq_len.track_link}
+    - 0
+    - ${seq_len.rollout_steps}
+    - 1
+  dyna_joint_obs/dyna_joint:
+    - ${seq_len.dyna_joint_obs}
+    - 0
+    - ${seq_len.rollout_steps}
+    - 1
+  free_link_obs/free_link:
+    - ${seq_len.free_link_obs}
+    - 0
+    - ${seq_len.rollout_steps}
+    - 1
+  actuator_obs/actuator:
+    - ${seq_len.actuator_obs}
+    - 0
+    - ${seq_len.rollout_steps}
+    - 1
+  ctrl/actuator:
+    - ${seq_len.actuator}
+    - 0
+    - ${seq_len.rollout_steps}
+    - 1
+  target_pose/track_link:
+    - ${seq_len.track_link}
+    - 0
+    - ${seq_len.rollout_steps}
+    - 1
+datasets:
+  clean:
+    dataset:
+      path: ${hardware_dataset_path}
+      group_seq_lens: ${seq_len}
+      rollout_groups:
+        - ctrl
+        - track_link_obs
+        - dyna_joint_obs
+        - free_link_obs
+        - actuator_obs
+        - target_pose
+    tasks:
+      - hardware_gen
+    batch_process_fn:
+      _target_: t2.train.augment.ComposeAugmentation
+      augmentations:
+        - _target_: t2.train.augment.AddPositionId
+          pos_seq_lens:
+            <<: *hardware_pos_seq_lens
+        - _target_: t2.train.augment.AddJointOrderAugmentation
+        - _target_: t2.train.augment.TransformAugmentation
+          pos_aug_magnitude: [0.3, 0.3, 0.0]
+          orn_aug_magnitude: [0.0, 0.0, 0.5]
+          affected_pose_fields:
+            - target_pose
+            - free_link_obs
+            - track_link_obs
+
+# Quadruped-manipulator design-space token counts
+seq_len:
+  dyna_joint: 62
+  free_link: 1
+  fixed_joint: 100
+  link: 78
+  actuator: 19
+  track_link: 1

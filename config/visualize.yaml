@@ -1,0 +1,126 @@
+defaults:
+  - dataset: base
+  - _self_
+  - override hydra/job_logging: custom
+
+# Dataset configuration
+dataset:
+  path: ??? # Path to zarr file
+  timestep_sampler:
+    _target_: t2.data.dataset.TimestepSampler
+    num_rollout_steps: ${seq_len.rollout_steps}
+    step_size: 1
+  load_into_memory: false
+  min_episode_length: 0
+  group_time_offsets:
+    target_pose: 0
+  rollout_groups:
+    - ctrl
+    - track_link_obs
+    - dyna_joint_obs
+    # - free_link_obs
+    - actuator_obs
+    - target_pose
+
+# Data loader configuration
+dataloader:
+  _target_: torch.utils.data.DataLoader
+  batch_size: 1
+  shuffle: false
+  num_workers: 8
+  drop_last: false
+
+# Visualization configuration
+visualization:
+  dt: 0.1 # Sleep time per simulation step in seconds
+  max_batches: null # Maximum number of batches to visualize (null for all)
+  step_through_time: false # Whether to step through time in each batch
+  step_physics: false # Whether to step physics in each batch
+  disable_gui: false
+
+# Optional path to save physics states as pickle file
+# If set, saves states with hardware_seed and episode_seed in filename
+# e.g., pickle_output_root=/tmp/states/ -> /tmp/states/ep{episode_seed:02d}_hw{hardware_seed}.pkl
+pickle_output_root: null
+
+# Sequence lengths for dataset
+seq_len:
+  dyna_joint: 62
+  free_link: 1
+  fixed_joint: 100
+  link: 78
+  actuator: 20
+  track_link: 2
+  free_link_obs: ${seq_len.free_link}
+  dyna_joint_obs: ${eval:"int(${seq_len.dyna_joint}//2)"}
+  actuator_obs: ${seq_len.actuator}
+  rollout_steps: 1
+  ctrl: ${seq_len.actuator}
+  target_pose: ${seq_len.track_link}
+  track_link_obs: ${seq_len.track_link}
+
+gravcomp: false # true for only fixed base robots
+
+batch_process_fn:
+  _target_: t2.train.augment.ComposeAugmentation
+  augmentations:
+    - _target_: t2.train.augment.AddPositionId
+      pos_seq_lens:
+        dyna_joint:
+          - ${eval:"int(${seq_len.dyna_joint}//2)"}
+          - 0
+          - 1
+          - 2
+        fixed_joint:
+          - ${eval:"int(${seq_len.fixed_joint}//2)"}
+          - 0
+          - 1
+          - 2
+        link:
+          - ${seq_len.link}
+          - 0
+          - 1
+          - 1
+        actuator:
+          - ${seq_len.actuator}
+          - 0
+          - 1
+          - 1
+        # all obs are scaled by rollout_steps
+        track_link_obs/track_link:
+          - ${seq_len.track_link}
+          - 0
+          - ${seq_len.rollout_steps}
+          - 1
+        dyna_joint_obs/dyna_joint:
+          - ${seq_len.dyna_joint_obs}
+          - 0
+          - ${seq_len.rollout_steps}
+          - 1
+        free_link_obs/free_link:
+          - ${seq_len.free_link_obs}
+          - 0
+          - ${seq_len.rollout_steps}
+          - 1
+        actuator_obs/actuator:
+          - ${seq_len.actuator_obs}
+          - 0
+          - ${seq_len.rollout_steps}
+          - 1
+        ctrl/actuator:
+          - ${seq_len.actuator}
+          - 0
+          - ${seq_len.rollout_steps}
+          - 1
+        target_pose/track_link:
+          - ${seq_len.track_link}
+          - 0
+          - ${seq_len.rollout_steps}
+          - 1
+    # - _target_: t2.train.augment.TransformAugmentation
+    #   pos_aug_magnitude: [0.3, 0.3, 0.0]
+    #   orn_aug_magnitude: [0.0, 0.0, 0.5]
+    #   affected_pose_fields:
+    #     - target_pose
+    #     # - free_link_obs
+    #     - track_link_obs

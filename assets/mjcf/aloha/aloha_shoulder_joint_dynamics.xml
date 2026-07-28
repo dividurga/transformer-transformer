@@ -1,0 +1,9 @@
+<mujoco model="aloha_shoulder_with_joint_dynamics">
+    <include file="aloha_shoulder.xml" />
+
+    <custom>
+        <numeric name="waist\joint\damping\0\range\y" size='2' data='0.0 20.0' />
+        <numeric name="waist\joint\armature\0\range\y" size='2' data='0.0 0.5' />
+        <numeric name="waist\joint\frictionloss\0\range\y" size='2' data='0.0 2.0' />
+    </custom>
+</mujoco>

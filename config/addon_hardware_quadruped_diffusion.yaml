@@ -1,0 +1,9 @@
+defaults:
+  - model/tasks@model.tasks.hardware_gen: hardware_gen
+  - model/tasks/adapter@model.tasks.hardware_gen.adapters.free_link_obs: pose_diffuse
+  - addon_hardware_quadruped
+  # Log encoding for attributes that span multiple orders of magnitude.
+  - override model/tasks/adapter@model.tasks.hardware_gen.adapters.link: link_log_diffuse
+  - override model/tasks/adapter@model.tasks.hardware_gen.adapters.dyna_joint: dyna_joint_log_diffuse
+  - override model/tasks/adapter@model.tasks.hardware_gen.adapters.actuator: actuator_log_diffuse
+  - _self_

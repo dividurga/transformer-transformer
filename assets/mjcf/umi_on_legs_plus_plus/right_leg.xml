@@ -1,0 +1,47 @@
+<mujoco model="right_leg">
+    <include file="defaults.xml" />
+
+    <worldbody>
+        <body name="right_leg" pos="0 0 0" euler="0 0 0">
+            <geom name="hip_motor" class="big_motor" pos="0.02 0 0"
+                euler="0 1.5707963267948966 0"
+            />
+            <joint name="hip_joint" class="abduction" />
+            <geom size="0.046 0.02" class="big_motor" pos="0 -0.08 0" quat="1 1 0 0"
+            />
+            <body name="thigh" pos="0 -0.08 0">
+                <joint axis="0 1 0" name="thigh_joint" class="front_hip" />
+                <geom name="thigh_geom_1" fromto="0.035 0 -0.0 0.018 0 -0.22"
+                    type="cylinder" />
+                <geom name="thigh_geom_2" fromto="-0.035 0 -0.0 -0.018 0 -0.22"
+                    type="cylinder" />
+                <body name="calf" pos="0 0 -0.216">
+                    <joint axis="0 1 0" name="calf_joint" class="knee" />
+                    <geom name="calf_motor" class="small_motor"
+                        quat="1 1 0 0"
+                    />
+                    <geom name="calf_geom" fromto="0 0 0 0 0 -0.19"
+                        type="cylinder" />
+                    <body name="foot" pos="0.0 0 -0.20">
+                        <geom name="foot" class="foot" />
+                    </body>
+                </body>
+            </body>
+        </body>
+    </worldbody>
+
+    <keyframe>
+        <key name="home" qpos="0 0.9 -1.8" ctrl="0 0.9 -1.8"
+        />
+        <key name="penalty_default_qpos_weight" qpos="0.5 0.5 0.1" />
+    </keyframe>
+    <actuator>
+        <position kp="30.0" kv="0.5" forcerange="-23.7 23.7" ctrlrange="-1.0472 1.0472"
+            name="hip_joint" joint="hip_joint" />
+        <position kp="30.0" kv="0.5" forcerange="-23.7 23.7" ctrlrange="-1.5708 3.4907"
+            name="thigh_joint" joint="thigh_joint" />
+        <position kp="30.0" kv="0.5" forcerange="-45.43 45.43" ctrlrange="-2.7227 -0.0"
+            name="calf_joint" joint="calf_joint" />
+    </actuator>
+
+</mujoco>

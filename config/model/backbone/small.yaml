@@ -1,0 +1,9 @@
+# The paper's "Small" capacity (~11.6M params) and the training default.
+# The run-by-run capacity table lives in docs/starter.md.
+_target_: t2.model.core.DiT
+hidden_dim: 256
+depth: 8
+num_heads: 4
+mlp_ratio: 4
+attn_dropout: 0.0
+add_zero_attn: false

@@ -1,0 +1,104 @@
+defaults:
+  - dataset@datasets.clean.dataset: base
+  - _self_
+
+hardware_dataset_path: ???
+
+hardware_pos_seq_lens: &hardware_pos_seq_lens
+  dyna_joint:
+    - ${eval:"int(${seq_len.dyna_joint}//2)"}
+    - 0
+    - 1
+    - 2
+  fixed_joint:
+    - ${eval:"int(${seq_len.fixed_joint}//2)"}
+    - 0
+    - 1
+    - 2
+  link:
+    - ${seq_len.link}
+    - 0
+    - 1
+    - 1
+  actuator:
+    - ${seq_len.actuator}
+    - 0
+    - 1
+    - 1
+  # all obs are scaled by rollout_steps
+  track_link_obs/track_link:
+    - ${seq_len.track_link}
+    - 0
+    - ${seq_len.rollout_steps}
+    - 1
+  dyna_joint_obs/dyna_joint:
+    - ${seq_len.dyna_joint_obs}
+    - 0
+    - ${seq_len.rollout_steps}
+    - 1
+  free_link_obs/free_link:
+    - ${seq_len.free_link_obs}
+    - 0
+    - ${seq_len.rollout_steps}
+    - 1
+  actuator_obs/actuator:
+    - ${seq_len.actuator_obs}
+    - 0
+    - ${seq_len.rollout_steps}
+    - 1
+  ctrl/actuator:
+    - ${seq_len.actuator}
+    - 0
+    - ${seq_len.rollout_steps}
+    - 1
+  target_pose/track_link:
+    - ${seq_len.track_link}
+    - 0
+    - ${seq_len.rollout_steps}
+    - 1
+datasets:
+  clean:
+    dataset:
+      path: ${hardware_dataset_path}
+      group_seq_lens: ${seq_len}
+      rollout_groups:
+        - ctrl
+        - track_link_obs
+        - dyna_joint_obs
+        # - free_link_obs <-- our mobile bimanual setup doesn't have free link obs
+        - actuator_obs
+        - target_pose
+    tasks:
+      - hardware_gen
+    batch_process_fn:
+      _target_: t2.train.augment.ComposeAugmentation
+      augmentations:
+        - _target_: t2.train.augment.AddPositionId
+          pos_seq_lens:
+            <<: *hardware_pos_seq_lens
+        - _target_: t2.train.augment.AddJointOrderAugmentation
+        # Transform augmentations should not be disabled until transform augmentations
+        # also handle the wheeled base prismatic and revolution joints
+        # - _target_: t2.train.augment.TransformAugmentation
+        #   pos_aug_magnitude: [0.3, 0.3, 0.0]
+        #   orn_aug_magnitude: [0.0, 0.0, 0.5]
+        #   affected_pose_fields:
+        #     - target_pose
+        #     # - free_link_obs # fixed based arms don't have free link obs
+        #     - track_link_obs
+
+model:
+  pos_embs:
+    order:
+      _target_: torch.nn.Embedding
+      num_embeddings: 2
+      embedding_dim: ${model.backbone.hidden_dim}
+
+# Wheeled-bimanual design-space token counts
+seq_len:
+  dyna_joint: 40
+  free_link: 1
+  fixed_joint: 74
+  link: 55
+  actuator: 20
+  track_link: 2

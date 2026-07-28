@@ -1,0 +1,46 @@
+defaults:
+  - inference
+  - evals/hardware_gen@eval_fn: variable_viperx
+  - /dataset/timestep_sampler@timestep_sampler: even
+  - _self_
+  - override hardware_optimizer@eval_fn.hardware_optimizer_fn: zeroth_order
+  - override hydra/job_logging: custom
+
+# scripts/plot_hardware_opt.py classifies runs by tags passed ON THE COMMAND
+# LINE (it parses the recorded argv, not the wandb tag field) — see
+# "Reproducing the co-design results figure" in docs/visualization.md.
+tags: null
+task_name: hardware_gen
+pickle_path: ???
+# match the paper's evaluation protocol (overrides the inference.yaml default of 3)
+num_seeds_per_datapoint: 9
+
+# If true, pre-compute all model outputs for all trajectory/seed combinations
+# at the start, then unload the model from GPU to save memory.
+run_model_upfront: false
+
+eval_fn:
+  runner:
+    env:
+      pickle_path: ${pickle_path}
+  traj_indices:
+    - 0
+    - 1
+    - 2
+    - 3
+    - 4
+    - 5
+    - 6
+    - 7
+    - 8
+    - 9
+    - 10
+    - 11
+    - 12
+    - 13
+    - 14
+    - 15
+    - 16
+    - 17
+    - 18
+    - 19

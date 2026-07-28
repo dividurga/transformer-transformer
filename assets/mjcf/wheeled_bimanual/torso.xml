@@ -1,0 +1,54 @@
+<mujoco model="torso">
+    <include file="defaults.xml" />
+
+    <worldbody>
+        <body name="torso_body" pos="0 0 0">
+            <!-- Main torso - slimmer white body with orange accent band -->
+            <geom name="torso_main" class="body_panel" type="box" size="0.05 0.10 0.10"
+                pos="0 0 0.10" />
+            <geom name="torso_accent" class="accent_orange" type="box" size="0.052 0.102 0.02"
+                pos="0 0 0.02" />
+
+            <!-- Shoulder mounts - flat orange cylinder caps (reference design) -->
+            <geom name="left_shoulder_cap" type="cylinder" size="0.05 0.015"
+                pos="0 0.12 0.14" euler="1.5708 0 0"
+                rgba="0.96 0.52 0.12 1" density="100" />
+            <geom name="right_shoulder_cap" type="cylinder" size="0.05 0.015"
+                pos="0 -0.12 0.14" euler="1.5708 0 0"
+                rgba="0.96 0.52 0.12 1" density="100" />
+
+            <!-- Head mount -->
+            <body name="head" pos="0 0 0.22">
+                <geom name="neck" class="body_panel" type="cylinder" size="0.022 0.015" pos="0 0 0" />
+
+                <!-- Face: capsule body -->
+                <geom name="head_face" type="capsule" size="0.05" fromto="0 0 0.04 0 0 0.07"
+                    rgba="0.98 0.96 0.94 1" />
+
+                <!-- Orange cap/visor on top -->
+                <geom name="head_cap" type="cylinder" size="0.055 0.02" pos="0 0 0.10"
+                    rgba="0.96 0.52 0.12 1" />
+                <geom name="head_cap_band" type="cylinder" size="0.1 0.004" pos="0 0 0.08"
+                    rgba="0.96 0.52 0.12 1" />
+
+                <!-- Eyes: two black vertical capsules -->
+                <geom name="left_eye" type="capsule" size="0.006"
+                    fromto="0.048 0.018 0.04 0.048 0.018 0.06"
+                    rgba="0.1 0.1 0.1 1" />
+                <geom name="right_eye" type="capsule" size="0.006"
+                    fromto="0.048 -0.018 0.04 0.048 -0.018 0.06"
+                    rgba="0.1 0.1 0.1 1" />
+            </body>
+
+            <!-- Arm mount sites - at the shoulder cap -->
+            <site name="left_arm_7dof_mount" pos="0 0.14 0.14" euler="0 0 0" />
+            <site name="right_arm_7dof_mount" pos="0 -0.14 0.14" euler="0 0 0" />
+        </body>
+    </worldbody>
+
+    <keyframe>
+        <key name="home" />
+        <key name="penalty_default_qpos_weight" />
+        <key name="mink_damping_scale" />
+    </keyframe>
+</mujoco>

@@ -1,0 +1,4 @@
+defaults:
+  - qpos
+  - diffuse
+  - _self_

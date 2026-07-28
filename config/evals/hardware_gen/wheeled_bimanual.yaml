@@ -1,0 +1,7 @@
+defaults:
+  - hardware_gen_eval
+  - /runner: wheeled_bimanual_mink
+  - /env@runner.env: wheeled_bimanual
+  - _self_
+
+gravcomp: true # true for only fixed base robots

@@ -1,0 +1,8 @@
+# The paper's "Large" capacity (~63.6M params).
+_target_: t2.model.core.DiT
+hidden_dim: 512
+depth: 12
+num_heads: 8
+mlp_ratio: 4
+attn_dropout: 0.0
+add_zero_attn: false

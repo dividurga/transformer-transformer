@@ -1,0 +1,5 @@
+_target_: diffusers.schedulers.scheduling_ddim.DDIMScheduler
+num_train_timesteps: 5
+beta_schedule: squaredcos_cap_v2
+clip_sample: True
+prediction_type: epsilon # or sample

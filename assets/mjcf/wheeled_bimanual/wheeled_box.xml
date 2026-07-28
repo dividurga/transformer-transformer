@@ -1,0 +1,23 @@
+<mujoco model="wheeled_box">
+    <include file="defaults.xml" />
+
+    <worldbody>
+        <body name="wheeled_box_body" pos="0 0 0.05">
+            <!-- Main box base - square shape, orange accent color -->
+            <geom name="base_box" class="accent_orange" size="0.15 0.15 0.05" pos="0 0 0" />
+
+            <!-- White top panel - square -->
+            <geom name="base_top" class="body_panel" size="0.13 0.13 0.01" pos="0 0 0.06" />
+
+            <!-- Spine mount site - can choose between prismatic spine, 3-DOF rotational spine, or
+            fixed spine -->
+            <site name="spine|spine_3dof|spine_fixed_mount" pos="0 0 0.07" />
+        </body>
+    </worldbody>
+
+    <keyframe>
+        <key name="home" />
+        <key name="penalty_default_qpos_weight" />
+        <key name="mink_damping_scale" />
+    </keyframe>
+</mujoco>

@@ -1,0 +1,61 @@
+<mujoco model="aloha_base_vertical_bimanual">
+    <compiler angle="radian" meshdir="assets" autolimits="true" />
+
+    <asset>
+        <mesh file="vx300s_1_base.stl" scale="0.001 0.001 0.001" />
+    </asset>
+
+    <default>
+        <default class="vx300s">
+            <site group="4" />
+            <default class="visual">
+                <geom type="mesh" mass="0" group="2" contype="0" conaffinity="0" />
+            </default>
+            <default class="collision">
+                <geom group="3" type="mesh" condim="6" friction="1 5e-3 5e-4" solref=".01 1" />
+            </default>
+        </default>
+    </default>
+
+    <worldbody>
+        <body name="base_link" childclass="vx300s" pos="0 0 0.0" euler="0 0 0">
+            <geom type="box" size="0.45 0.55 0.005" pos="0 0 0.005" class="collision"
+                rgba="0.4 0.4 0.4 1" mass="2.0" />
+            <!-- left arm holder: rotated +pi/2 around x so the cylinder base mounts to the
+                 left wall (y=+wall) with its axis along world -y, and the arm's pan axis
+                 (local +z) points toward -y (the right arm). -->
+            <body name="left_arm_holder" pos="0 0.45 0.50" euler="1.5707963267948966 0 0">
+                <geom name="left_base_collision" type="cylinder" size="0.065 0.04"
+                    pos="0 0 0.04" class="collision" rgba="1 0 0 1" mass="0.5" />
+                <geom name="left_base_visual" quat="1 0 0 1" class="visual" mesh="vx300s_1_base"
+                    pos="0 0 0" />
+                <site name="left:shoulder_mount" pos="0 0 0.079" />
+            </body>
+            <!-- right arm holder: rotated -pi/2 around x; pan axis points toward +y. -->
+            <body name="right_arm_holder" pos="0 -0.45 0.50" euler="-1.5707963267948966 0 0">
+                <geom name="right_base_collision" type="cylinder" size="0.065 0.04"
+                    pos="0 0 0.04" class="collision" rgba="1 0 0 1" mass="0.5" />
+                <geom name="right_base_visual" quat="1 0 0 1" class="visual" mesh="vx300s_1_base"
+                    pos="0 0 0" />
+                <site name="right:shoulder_mount" pos="0 0 0.079" />
+            </body>
+        </body>
+    </worldbody>
+
+    <custom>
+        <numeric name="base_link\body\pos\0\range\y" size='2' data='-0.8 -0.1' />
+        <numeric name="base_link\body\pos\1\range\y" size='2' data='-0.0 0.0' />
+        <numeric name="base_link\body\pos\2\range\y" size='2' data='-0.1 0.1' />
+
+        <!-- symmetric arm mount x: both holders shifted by same x offset, varies in [-0.20, 0.20] -->
+        <numeric name="left_arm_holder\body\pos\0\range\y" size='2' data='-0.80 0.80' />
+        <text name="symmetric_arm_x"
+            data="left_arm_holder\body\pos\0\range\y;right_arm_holder\body\pos\0\range\y" />
+
+        <!-- symmetric arm mount z: both holders mounted at same height, varies in [0.30, 0.80] -->
+        <numeric name="left_arm_holder\body\pos\2\range\y" size='2' data='-0.45 1.55' />
+        <text name="symmetric_arm_z"
+            data="left_arm_holder\body\pos\2\range\y;right_arm_holder\body\pos\2\range\y" />
+    </custom>
+
+</mujoco>

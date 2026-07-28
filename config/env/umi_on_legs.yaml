@@ -1,0 +1,32 @@
+_target_: t2.env.track_env.FreeBaseTrackEnv
+# make sure this matches `look_ahead_steps` in the runner config
+pickle_path: ???
+center_robot: true
+center_traj: true
+reset_xy_pos: 0.0
+reset_z_angle: 0.0
+reset_qvel: 0.0
+reset_qpos: 0.0
+push_prob: 0.0
+push_velocity: [0.0, 0.0]
+transport_prob: 0.0
+transport_pos: [0.0, 0.0]
+transport_euler: [[0.0, 0.0, 0.0], [0.0, 0.0, 0.0]]
+add_plane: true
+episode_len: 2000
+sim_dt: 0.005
+ctrl_dt: 0.02
+robot_generator:
+  _target_: t2.robogen.umi_on_legs.umi_on_legs_arm_mount
+  _partial_: true
+pos_noise: 0.0
+orn_noise: 0.0
+scale_noise: 0.0
+noise_sample_prob: 0.0
+remove_visual_asset: false
+pos_err_sigma: 0.01
+orn_err_sigma: 0.5
+termination_fellover_threshold: 0.5
+termination_pos_err_threshold: 0.8
+include_obs_time_indices: none
+obs_time_indices: [0]

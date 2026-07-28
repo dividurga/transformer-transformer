@@ -1,0 +1,3 @@
+defaults:
+  - actuator_obs
+  - diffuse

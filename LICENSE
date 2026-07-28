@@ -1,0 +1,38 @@
+MIT License
+
+Copyright (c) 2026 Huy Ha
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+Portions of this repository are derived from third-party projects and remain
+under their original licenses, as noted in the file headers and the Code
+Acknowledgements section of the README. In particular, `t2/model/core.py`
+(derived from Meta's DiT) and the positional-embedding utilities in
+`t2/model/utils.py` (derived from Meta's MAE) are covered by their upstream
+Attribution-NonCommercial licenses.
+
+The files under `t2/mjx_env/` are derived from Brax and MuJoCo Playground and
+remain under the Apache License 2.0, reproduced in `LICENSES/Apache-2.0.txt`.
+The rotation-conversion helpers in `t2/train/augment.py` are copied from
+PyTorch3D and remain under the BSD 3-Clause license, reproduced in
+`LICENSES/BSD-3-Clause-pytorch3d.txt`.
+
+Robot model assets under `assets/mjcf/` derived from third-party robot models
+carry their own per-directory LICENSE files; the remaining asset directories
+are original compositions covered by this repository's MIT license.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.

@@ -1,0 +1,15 @@
+regularized_tracking_error:
+  _target_: t2.eval.diffusion_guidance.RegularizedExpTrackingError
+  pose_weight: 1.0
+  pos_sigma: 0.01
+  orn_sigma: 0.5
+  power: 2
+  torque_weight: 0.0
+  velocity_weight: 0.0
+  leaky_clip_slope: 0.0
+joint_vel:
+  _target_: t2.eval.diffusion_guidance.JointVel
+  weight: 0.5
+  joint_indices: null
+  # this is much higher than the average joint velocity
+  max_joint_vel: 5.0

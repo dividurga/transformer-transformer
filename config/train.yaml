@@ -1,0 +1,98 @@
+defaults:
+  - model: t2
+  # - addon_hardware_quadruped_diffusion
+  # - addon_ctrl_quadruped
+  - addon_hardware_bimanual_diffusion
+  # - addon_hardware_viperx_diffusion
+  # - addon_ctrl_viperx
+  - override hydra/job_logging: custom
+  - _self_
+
+seq_len:
+  # The per-design-space token counts (dyna_joint, free_link, fixed_joint,
+  # link, actuator, track_link) are provided by the addon_* configs in the
+  # defaults list above; the entries below are derived from them.
+  free_link_obs: ${seq_len.free_link}
+  dyna_joint_obs: ${eval:"int(${seq_len.dyna_joint}//2)"}
+  actuator_obs: ${seq_len.actuator}
+  rollout_steps: 8
+  ctrl: ${seq_len.actuator}
+  target_pose: ${seq_len.track_link}
+  track_link_obs: ${seq_len.track_link}
+ctrl_seq_len:
+  dyna_joint: ${seq_len.dyna_joint}
+  free_link: ${seq_len.free_link}
+  fixed_joint: ${seq_len.fixed_joint}
+  link: ${seq_len.link}
+  actuator: ${seq_len.actuator}
+  track_link: ${seq_len.track_link}
+  free_link_obs: ${seq_len.free_link_obs}
+  dyna_joint_obs: ${seq_len.dyna_joint_obs}
+  actuator_obs: ${seq_len.actuator_obs}
+  rollout_steps: 8
+  ctrl: ${seq_len.ctrl}
+  target_pose: ${seq_len.target_pose}
+  track_link_obs: ${seq_len.track_link_obs}
+dims:
+  dyna_joint_id_bits: 6 # max 64 joints
+  fixed_joint_id_bits: 7 # max 128 fixed joints
+  link_id_bits: 7 # max 128 links
+  free_link_id_bits: 1 # max 1 free link, but with -1 for no free link
+  track_link_id_bits: 2 # max 4 track links, but with -1 for no track link
+  actuator_id_bits: 6 # max 64 actuators
+  contact_dim_bits: 3 # max 8 contact dims (mujoco uses up to 6)
+  geom_type_bits: 3 # max 8 geom types (we support 5 `GeomType`s)
+  dyna_joint_type_bits: 2 # max 4 joint types (we support 3 `DynamicJointType`s)
+  actuator_type_bits: 1 # max 2 actuator types (we support 2 `ActuatorType`s)
+
+seed: 0
+use_flash_attn: false
+_convert_: all
+device: cuda
+wandb:
+  tags: []
+  config_exclude_keys: null
+optimizer:
+  _target_: torch.optim.AdamW
+  lr: ${train.learning_rate}
+  weight_decay: 0
+lr_scheduler:
+  _target_: transformers.get_scheduler
+  name: cosine
+  num_warmup_steps: 500
+accelerator:
+  _target_: accelerate.Accelerator
+  gradient_accumulation_steps: 1
+  mixed_precision: bf16 # no, fp16, bf16, fp8
+  log_with: wandb
+ema:
+  _target_: diffusers.training_utils.EMAModel
+  power: 0.75
+  update_after_step: 0
+train:
+  _convert_: all
+  num_epochs: 20
+  rollout_every_n_epochs: 1
+  eval_every_n_epochs: 1
+  run_val: false
+  batch_size: 1024
+  val_batch_size: 1
+  learning_rate: 1e-4
+  max_grad_norm: 1.0
+  ckpt_every_n_epochs: 1
+  load_ckpt_path: null
+  log_stats_every_n_steps: 10
+  num_batches_per_epoch: 1024
+  num_eval_batches_per_epoch: 32
+  eval_batch_size: ${train.batch_size}
+  normalization_clip: null
+
+datasets: {}
+dataloader:
+  _target_: torch.utils.data.DataLoader
+  num_workers: 16
+  pin_memory: false
+  drop_last: true
+  persistent_workers: false
+  shuffle: false # no shuffle because we use `torch.utils.data.RandomSampler`
+evals: {}

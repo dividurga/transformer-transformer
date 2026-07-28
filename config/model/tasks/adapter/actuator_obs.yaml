@@ -1,0 +1,12 @@
+defaults:
+  - base
+  - _self_
+modality:
+  name: actuator_obs
+  max_seq_len: ${seq_len.actuator_obs}
+  id_attrs:
+   - time/id
+   - actuator/id
+  attrs:
+    velocity: 1
+    force: 1

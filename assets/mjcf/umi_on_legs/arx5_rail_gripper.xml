@@ -1,0 +1,131 @@
+<mujoco model="arx5_gripper">
+    <compiler angle="radian" meshdir="assets" autolimits="true" />
+
+    <default>
+        <default class="arx5">
+            <joint damping="0.005" armature="0.001" frictionloss="0.005" />
+            <general ctrlrange="-30 30" />
+            <default class="arx5_collision">
+                <geom type="cylinder" group="3" mass="0" density="0" />
+            </default>
+            <default class="arx5_finger_collision">
+                <geom priority="1" type="mesh" group="3" mass="0" density="0" condim="6"
+                    friction="0.9 0.8 0.2" />
+            </default>
+        </default>
+        <default class="rail">
+            <joint damping="0.001" armature="0.0001" frictionloss="0.001" />
+        </default>
+        <default class="visual">
+            <geom type="mesh" contype="0" conaffinity="0" group="2" />
+        </default>
+
+    </default>
+
+    <asset>
+        <mesh file="arx5_gripper_gear.obj" name="arx_gripper_gear" />
+        <mesh file="arx5_gripper_left_finger.obj" name="arx_gripper_left_finger" />
+        <mesh file="arx5_gripper_right_finger.obj" name="arx_gripper_right_finger" />
+        <mesh file="arx5_gripper_collision_right_manual.obj"
+            name="arx5_gripper_collision_right_manual" />
+        <mesh file="arx5_gripper_collision_left_manual.obj"
+            name="arx5_gripper_collision_left_manual" />
+        <mesh file="arx5_gripper_motor.obj" name="arx_gripper_motor" />
+    </asset>
+
+    <worldbody>
+        <body name='pos_x'>
+            <geom type="sphere" size="0.001" mass='0.001' />
+            <joint class="rail" name="pos_x" axis="1 0 0" range="-0.5 0.5" type="slide" />
+            <body name="pos_y">
+                <geom type="sphere" size="0.001" mass='0.001' />
+                <joint class="rail" name="pos_y" axis="0 1 0" range="-0.5 0.5" type="slide" />
+                <body name="pos_z">
+                    <geom type="sphere" size="0.001" mass='0.001' />
+                    <joint class="rail" name="pos_z" axis="0 0 1" range="0 0.5" type="slide" />
+                    <body name="rot_z">
+                        <geom type="sphere" size="0.001" mass='0.001' />
+                        <joint class="rail" name="rot_z" axis="0 0 1" range="-3.14 3.14"
+                            type="hinge" />
+                        <body name="rot_y">
+                            <geom type="sphere" size="0.001" mass='0.001' />
+                            <joint class="rail" name="rot_y" axis="0 1 0" range="-1.57 1.57"
+                                type="hinge" />
+                            <body name="rot_x">
+                                <geom type="sphere" size="0.001" mass='0.001' />
+                                <joint class="rail" name="rot_x" axis="1 0 0" range="-1.57 1.57"
+                                    type="hinge" />
+                                <body name="gripper" pos="-0.15 0 0" euler="-3.1416 0 0">
+                                    <site name="end_effector" pos="0.15 0 0"
+                                        euler="0 1.57079632679 -1.57079632679"
+                                    />
+                                    <inertial
+                                        pos="0.0471798400661976 0.000102970421835668 -0.000138510949393961"
+                                        mass="0.462244960775882"
+                                        diaginertia="0.00068 0.00036 0.00091" />
+                                    <geom type="box" size="0.01 0.09 0.008"
+                                        pos="0.06 0.00 0.00"
+                                        quat="1 0 1 0"
+                                        class="arx5_collision" />
+                                    <geom class="visual" mesh="arx_gripper_motor" />
+                                    <body name="left_finger">
+                                        <joint name="left_finger_joint" axis="0 1 0"
+                                            range="0.001 0.045" type="slide" class="arx5"
+                                            damping="0" frictionloss="0" />
+                                        <inertial
+                                            pos="0 0 0"
+                                            mass="0.0001"
+                                            diaginertia="0.00068 0.00036 0.00091" />
+                                        <geom class="visual" mesh="arx_gripper_left_finger" />
+                                        <geom class="arx5_finger_collision" type="mesh"
+                                            mesh="arx5_gripper_collision_left_manual"
+                                            pos="0.0 -0.03 0" />
+                                    </body>
+                                    <body name="right_finger">
+                                        <joint name="right_finger_joint" axis="0 1 0"
+                                            range="-0.045 -0.001" type="slide" class="arx5"
+                                            damping="0" frictionloss="0" />
+                                        <inertial
+                                            pos="0 0 0"
+                                            mass="0.0001"
+                                            diaginertia="0.00068 0.00036 0.00091" />
+                                        <geom class="visual"
+                                            mesh="arx_gripper_right_finger" />
+                                        <geom class="arx5_finger_collision" type="mesh"
+                                            mesh="arx5_gripper_collision_right_manual"
+                                            pos="0.0 0.03 0" />
+                                    </body>
+                                    <geom class="visual" mesh="arx_gripper_gear" />
+                                </body>
+                            </body>
+                        </body>
+                    </body>
+                </body>
+            </body>
+        </body>
+
+    </worldbody>
+
+    <actuator>
+        <position class="arx5" name="left_finger_joint" joint="left_finger_joint" kp="10" kv="0.5"
+            ctrlrange="0.001 0.045" />
+        <position class="arx5" name="pos_x" joint="pos_x" kp="10.0" kv="4.0" ctrlrange="-0.5 0.5" />
+        <position class="arx5" name="pos_y" joint="pos_y" kp="10.0" kv="4.0" ctrlrange="-0.5 0.5"
+        />
+        <position class="arx5" name="pos_z" joint="pos_z" kp="100.0" kv="10.0" ctrlrange="0.0 0.5"
+        />
+        <position class="arx5" name="rot_z" joint="rot_z" kp="10.0" kv="4.0"
+            ctrlrange="-3.14 3.14" />
+        <position class="arx5" name="rot_y" joint="rot_y" kp="10.0" kv="4.0"
+            ctrlrange="-1.57 1.57"
+        />
+        <position class="arx5" name="rot_x" joint="rot_x" kp="10.0" kv="4.0"
+            ctrlrange="-1.57 1.57"
+        />
+    </actuator>
+
+    <equality>
+        <joint name="gripper" joint1="left_finger_joint" joint2="right_finger_joint"
+            polycoef="0.0 -1.0 0 0 0" />
+    </equality>
+</mujoco>

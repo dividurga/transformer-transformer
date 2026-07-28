@@ -1,0 +1,21 @@
+_target_: t2.model.modality.ModalityAdapter
+modality:
+  _target_: t2.model.modality.Modality
+  id_attrs: []
+  name: ???
+  pad_value: -1.0
+  max_seq_len: ???
+  attrs: ???
+  attr_norms:
+    _target_: torch.nn.ModuleDict
+loss_weight: 1.0
+attr_encoders: {}
+attr_decoders: {}
+hidden_dim: ${model.backbone.hidden_dim}
+only_use_mask_for_padding: false
+loss_fn:
+  _target_: torch.nn.functional.huber_loss
+  reduction: none
+  _partial_: true
+weight_loss_evenly_by_batch: true
+input_noise_std: 0.0

@@ -1,0 +1,24 @@
+defaults:
+  - optimize_cmaes_base
+  - runner: wheeled_bimanual_mink
+  - env@runner.env: wheeled_bimanual
+  - _self_
+
+robogen_from_params_fn:
+  _target_: t2.robogen.wheeled_bimanual.wheeled_bimanual_from_params
+
+# Flat list = one optimization per trajectory, which is the cheap
+# data-generation default. The paper's figure rows marked multi_traj compose
+# trajectories instead, which is triggered ONLY by a list of lists — see the
+# figure-reproduction section of docs/visualization.md.
+traj_indices:
+  - 0
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+  - 6
+  - 7
+  - 8
+  - 9

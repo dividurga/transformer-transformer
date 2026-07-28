@@ -1,0 +1,4 @@
+defaults:
+  - fixed_joint
+  - diffuse
+  - _self_

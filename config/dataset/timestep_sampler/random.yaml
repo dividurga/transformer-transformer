@@ -1,0 +1,2 @@
+_target_: t2.data.dataset.RandomTimestepSampler
+num_rollout_steps: ${..group_seq_lens.rollout_steps}

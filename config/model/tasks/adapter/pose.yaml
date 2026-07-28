@@ -1,0 +1,11 @@
+defaults:
+  - base
+  - _self_
+modality:
+  name: pose
+  pad_value: 0.0
+  max_seq_len: ???
+  id_attrs: ???
+  attrs:
+    pos: 3
+    rotmat: 9

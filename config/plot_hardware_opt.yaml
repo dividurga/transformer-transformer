@@ -1,0 +1,175 @@
+# Configuration for hardware optimization results plotting
+defaults:
+  - override hydra/job_logging: custom
+  - _self_
+
+# Input/Output paths
+paths:
+  results_root: ??? # root directory containing your wandb eval run directories
+  output_dir: ./hardware_opt_plots
+  cache_dir: null # defaults to output_dir if null
+  filter_cache: ${paths.results_root}/filter_cache.yaml
+
+# Experiments to plot
+experiments:
+  - viperx/tracking_only/single_traj
+  - viperx/tracking_size/single_traj
+  - viperx/tracking_weight/single_traj
+  - viperx/tracking_torque/single_traj
+  - viperx/tracking_velocity/single_traj
+  - viperx/tracking_only/multi_traj
+  - viperx/tracking_size/multi_traj
+  - viperx/tracking_weight/multi_traj
+  - viperx/tracking_torque/multi_traj
+  - viperx/tracking_velocity/multi_traj
+  - quadruped/tracking_only/single_traj
+  - quadruped/tracking_size/single_traj
+  - quadruped/tracking_torque/single_traj
+  - quadruped/tracking_velocity/single_traj
+  - bimanual/tracking_only/multi_traj
+  - bimanual/tracking_joint_vel/multi_traj
+  - bimanual/tracking_size/multi_traj
+
+# Plot times for each design space / trajectory type
+plot_times:
+  viperx/single_traj: [1.0, 4.0, 16.0, 64.0]
+  viperx/multi_traj: [1.0, 4.0, 16.0, 64.0, 256.0, 1024.0]
+  quadruped/single_traj: [1.0, 4.0, 16.0, 64.0, 256.0]
+  # bimanual/multi_traj: [1.0, 8.0, 64.0, 512.0, 4096.0, 32768.0]
+  bimanual/multi_traj: [1.0, 4.0, 16.0, 64.0, 256.0, 1024.0, 4096.0, 16384.0]
+
+# Run filters - specify which runs to include/exclude
+filters:
+  # Programs to include for each approach
+  cmaes_programs:
+    - optimize_cmaes_viperx.py
+    - optimize_cmaes_quadruped.py
+    - optimize_cmaes_wheeled_bimanual.py
+  guided_programs:
+    - evaluate_hardware_opt.py
+    - evaluate_hardware_opt_rl.py
+
+  # Git commits to exclude (list commits from your own eval runs to drop)
+  excluded_commits: []
+
+  # Git commits to exclude for multitraj runs
+  excluded_multitraj_commits: []
+
+  # Host filters: experiment_name -> allowed_hosts (empty means allow all)
+  # e.g. viperx/tracking_only/single_traj: [my-eval-machine]
+  host_filters: {}
+
+  # Optional: restrict guided runs to a single checkpoint per design space,
+  # keyed by the ckpt_path recorded in your own eval runs' wandb metadata.
+  # Empty means allow all checkpoints.
+  # e.g. viperx: wandb/run-<timestamp>-<id>/files/<step>.pt
+  guided_checkpoints: {}
+
+  # Tags to exclude
+  excluded_tags:
+    - datagen
+
+  # Required number of actual values per run
+  required_actual_values: 180 # 20 trajs x 9 seeds
+
+  # Maximum compute budget for guided approach
+  max_guided_compute_budget: 128
+
+# Approach settings
+approaches:
+  cmaes:
+    budgets: [5, 10, 15, 20, 25, 30, 35]
+    colormap: Oranges
+  guided:
+    budgets: [1, 2, 4, 8, 16, 32, 64, 128]
+    colormap: Greens
+  unguided:
+    budgets: [1, 2, 4, 8, 16, 32, 64, 128]
+    colormap: Blues
+  random:
+    color: '#E6194B'
+
+# Plot styling
+plot:
+  figure:
+    width: 12
+    height: 8
+    dpi: 300
+
+  grid:
+    num_rows: 4
+    num_cols: 5
+
+  scatter:
+    linewidths: 1
+    size: 40
+    zorder: 5
+    alpha: 0.9
+    marker: o
+
+  font:
+    # Commercial font used for the paper's figures. If it isn't installed,
+    # matplotlib warns and falls back to its default font — harmless.
+    family: MonoLisa Nerd Font Mono
+    tick_size: 9
+    legend_size: 9
+    budget_label_size: 6
+
+  legend:
+    width_fraction: 0.85
+    y_position: 0.89
+    dot_spacing: 2.5
+    dot_size: 150
+    dark_text_threshold:
+      cmaes: 30 # budgets >= this use white text
+      guided: 32
+
+# Output formats
+output:
+  formats:
+    - svg
+    - pdf
+  save_individual_axes: true
+  save_legend: true
+
+# Processing options
+processing:
+  use_cache: true
+  show_progress: true
+  confidence_level: 0.95
+  force_filter: false # set to true to regenerate filter cache
+
+optimize_time_overrides:
+  # Wall-clock seconds per optimization run, measured by the authors on their
+  # hardware. To plot against your own timings: every hardware-optimization
+  # run records its optimize time in the result zarr's hardware metas (it is
+  # also printed to the terminal at the end of the run) — collect those and
+  # override the entries below.
+  bimanual:
+    multi_traj:
+      guided:
+        1: 2.8
+        2: 4.07
+        4: 6.87
+        8: 12.41
+        16: 23.28
+        32: 45.5
+        64: 93.03
+        128: 185.9
+      unguided:
+        1: 0.75
+        2: 1.20
+        4: 2.14
+        8: 3.98
+        16: 7.65
+        32: 15.02
+        64: 29.84
+        128: 59.7
+      cmaes:
+        5: 2798
+        10: 5005
+        15: 6375
+        20: 8844
+        25: 9445
+        30: 10492.0
+        35: 11505.0

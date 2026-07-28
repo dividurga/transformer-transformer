@@ -1,0 +1,16 @@
+<mujoco model="umi_on_legs_plus_plus">
+    <worldbody>
+        <body name="base">
+            <freejoint />
+            <site
+                name="quadruped_manipulator|quadruped_manipulator_flipped_legs|wheeled_quadruped_manipulator_mount"
+            />
+            <camera name="body_cam" mode="trackcom" pos="1.2 1.2 0.5"
+                xyaxes="-0.766 0.643 -0.000 -0.127 -0.151 0.980" />
+        </body>
+    </worldbody>
+    <keyframe>
+        <key name="home" />
+        <key name="penalty_default_qpos_weight" />
+    </keyframe>
+</mujoco>

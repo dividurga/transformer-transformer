@@ -1,0 +1,5 @@
+defaults:
+  - viperx
+  - _self_
+robot_generator:
+  _target_: t2.robogen.viperx.variable_dof_viperx_full_variation

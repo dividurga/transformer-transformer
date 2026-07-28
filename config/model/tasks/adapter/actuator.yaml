@@ -1,0 +1,30 @@
+defaults:
+  - base
+  - _self_
+modality:
+  name: actuator
+  max_seq_len: ${seq_len.actuator}
+  id_attrs:
+    - id
+  attrs:
+    ctrl_range: 2
+    force_range: 2
+    kp: 1
+    kv: 1
+    gear_ratio: 1
+    type: ${dims.actuator_type_bits}
+  # must include dyna_joint/id in either id_attrs or attrs
+attr_encoders:
+  dyna_joint/id:
+    _target_: t2.model.encoding.BinaryEncoding
+    num_bits: ${dims.dyna_joint_id_bits}
+  type:
+    _target_: t2.model.encoding.BinaryEncoding
+    num_bits: ${dims.actuator_type_bits}
+attr_decoders:
+  dyna_joint/id:
+    _target_: t2.model.encoding.BinaryDecoding
+    num_bits: ${dims.dyna_joint_id_bits}
+  type:
+    _target_: t2.model.encoding.BinaryDecoding
+    num_bits: ${dims.actuator_type_bits}

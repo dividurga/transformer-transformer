@@ -1,0 +1,36 @@
+<mujoco model="rail">
+    <include file="defaults.xml" />
+
+    <worldbody>
+        <geom name="rail_geom" size="0.1881 0.03 0.01" pos="0 0 0.07" type="box" />
+        <geom name="rail_motor" pos="-0.2081 0 0.07" quat="1 0 1 0"
+            class="small_motor" />
+        <body name="rail" pos="0 0 0.07">
+            <joint name="rail_joint" type="slide" range="-0.16 0.16" axis="1 0 0" />
+            <site name="arx5_mount" pos="0.0 0 -0.038" />
+            <geom name="rail_mount_geom" type="box" size="0.04 0.03 0.005" pos="0.0 0 0.015"
+            />
+        </body>
+    </worldbody>
+
+    <keyframe>
+        <key name="home"
+            qpos="0"
+            ctrl="0"
+        />
+        <key name="penalty_default_qpos_weight" qpos="0" />
+    </keyframe>
+
+    <actuator>
+        <velocity gear="5" name="rail_joint" joint="rail_joint" ctrlrange="-0.25 0.25" kv="50"
+            forcerange="-45.3 45.3"
+        />
+
+    </actuator>
+
+    <custom>
+        <text name="scale_base_length"
+            data="base_geom_1\geom\fromto\3\range\y;base_geom_1\geom\fromto\0\range\-y;base_geom_2\geom\fromto\3\range\y;base_geom_2\geom\fromto\0\range\-y;base_geom_3\geom\fromto\3\range\y;base_geom_3\geom\fromto\0\range\-y;base_geom_4\geom\fromto\3\range\y;base_geom_4\geom\fromto\0\range\-y;base_geom_5\geom\fromto\3\range\y;base_geom_5\geom\fromto\0\range\y;base_geom_6\geom\fromto\3\range\-y;base_geom_6\geom\fromto\0\range\-y;base_geom_7\geom\fromto\3\range\y;base_geom_7\geom\fromto\0\range\y;base_geom_8\geom\fromto\3\range\-y;base_geom_8\geom\fromto\0\range\-y;base_geom_9\geom\fromto\0\range\-y;base_geom_9\geom\fromto\3\range\-y;base_geom_10\geom\fromto\0\range\y;base_geom_10\geom\fromto\3\range\y;base_geom_11\geom\fromto\0\range\y;base_geom_11\geom\fromto\3\range\y;base_geom_12\geom\fromto\0\range\-y;base_geom_12\geom\fromto\3\range\-y;left_leg@left_leg\body\pos\0\range\y-0.1761+0.0339;right_leg@right_leg\body\pos\0\range\y-0.1761+0.0339;left_leg_1@left_leg\body\pos\0\range\-y-0.0339+0.1761;right_leg_1@right_leg\body\pos\0\range\-y-0.0339+0.1761;battery\geom\pos\0\range\max(min(x,y-0.05),-y+0.05);rail@arx5@arx5_base_link\body\pos\0\range\max(min(x,y-0.028),-y+0.028);rail@rail_geom\geom\size\0\range\y;rail@rail_joint\joint\range\0\range\-y+0.02;rail@rail_joint\joint\range\1\range\y-0.02;rail@rail_motor\geom\pos\0\range\-y-0.032"
+        />
+    </custom>
+</mujoco>

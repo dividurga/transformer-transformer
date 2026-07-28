@@ -1,0 +1,4 @@
+defaults:
+  - dyna_joint_log
+  - diffuse
+  - _self_

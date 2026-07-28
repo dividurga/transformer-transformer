@@ -1,0 +1,39 @@
+defaults:
+  - backbone: small
+
+_convert_: all
+_target_: t2.model.t2.T2
+pos_embs:
+  time:
+    _target_: t2.model.encoding.OffsettedEmbedding
+    embedding:
+      _target_: torch.nn.Embedding
+      num_embeddings: 2002 # allow for observing one action in the past
+      embedding_dim: ${model.backbone.hidden_dim}
+    offset: 1 # allow previous timestep observation
+  link:
+    _target_: t2.model.encoding.OffsettedEmbedding
+    embedding:
+      _target_: torch.nn.Embedding
+      num_embeddings: ${eval:"${seq_len.link} + 1"}
+      embedding_dim: ${model.backbone.hidden_dim}
+    offset: 1 # ground link is -1
+  dyna_joint:
+    _target_: torch.nn.Embedding
+    num_embeddings: ${seq_len.dyna_joint}
+    embedding_dim: ${model.backbone.hidden_dim}
+  fixed_joint:
+    _target_: torch.nn.Embedding
+    num_embeddings: ${seq_len.fixed_joint}
+    embedding_dim: ${model.backbone.hidden_dim}
+  actuator:
+    _target_: torch.nn.Embedding
+    num_embeddings: ${seq_len.actuator}
+    embedding_dim: ${model.backbone.hidden_dim}
+  track_link:
+    _target_: t2.model.encoding.OffsettedEmbedding
+    embedding:
+      _target_: torch.nn.Embedding
+      num_embeddings: ${eval:"${seq_len.track_link} + 1"}
+      embedding_dim: ${model.backbone.hidden_dim}
+    offset: 1 # not a track link is -1

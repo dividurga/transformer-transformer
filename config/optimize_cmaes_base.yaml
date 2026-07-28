@@ -1,0 +1,75 @@
+defaults:
+  # Data-generation default only. Every CMA-ES baseline behind the paper's
+  # figure passed `reward_fns=<name>` explicitly, and you should too: the
+  # plotter files a run on the panel named in its `tags`, not the objective it
+  # actually optimized, so a mismatch is silently plotted rather than caught.
+  # The quadruped panels use the `_quadruped` variants.
+  - reward_fns: tracking_velocity
+  - override hydra/job_logging: custom
+  - _self_
+
+# scripts/plot_hardware_opt.py classifies runs by tags passed ON THE COMMAND
+# LINE (it parses the recorded argv, not the wandb tag field) — see
+# "Reproducing the co-design results figure" in docs/visualization.md.
+tags: null
+runner:
+  use_gui: false
+  render: true
+  render_fps: 24
+  qpos_noise: 0.0
+  env:
+    pickle_path: ${pickle_path}
+    pos_noise: 0.0
+    orn_noise: 0.0
+    scale_noise: 0.0
+    noise_sample_prob: 0.0
+    termination_pos_err_threshold: 1.0
+
+pickle_path: ???
+seed: 0
+num_episodes_per_traj: 1
+# The paper's figure protocol uses 9 seeds per trajectory
+# (config/plot_hardware_opt.yaml expects 20 trajs x 9 seeds = 180 values per
+# run); the default of 1 keeps casual runs cheap.
+num_hardware_seeds_per_traj: 1
+
+max_fun: 15
+# Keep n_jobs at 0. pycma treats n_jobs <= 0 as serial; any value above 0 —
+# including 1 — forks a multiprocessing.Pool via EvalParallel2, and every
+# optimization here already runs inside its own Ray task, so forking only adds
+# a deadlock hazard (pycma needs n_jobs > 1 for any parallelism at all).
+n_jobs: 0
+pop_size: 5
+init_sigma: 0.5
+num_params: ???
+choices: ???
+
+robogen_from_params_fn:
+  _partial_: true
+  _target_: ???
+
+# Flat list = one optimization per trajectory, which is the cheap
+# data-generation default. The paper's figure rows marked multi_traj compose
+# trajectories instead, which is triggered ONLY by a list of lists — see the
+# figure-reproduction section of docs/visualization.md.
+traj_indices:
+  - 0
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+  - 6
+  - 7
+  - 8
+  - 9
+  - 10
+  - 11
+  - 12
+  - 13
+  - 14
+  - 15
+  - 16
+  - 17
+  - 18
+  - 19

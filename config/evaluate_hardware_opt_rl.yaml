@@ -1,0 +1,16 @@
+defaults:
+  - evaluate_hardware_opt
+  - override evals/hardware_gen@eval_fn: quadruped
+  - _self_
+
+tags: null
+use_predicted_reset_qpos: false
+max_concurrent_tasks: 50
+
+eval_fn:
+  choice_to_ckpt: ???
+
+robotoken_root_path: umi_on_legs_plus_plus_robotokens
+choice_to_ckpt_path: choice_to_ckpt_path.json
+# match the paper's evaluation protocol (overrides the inference.yaml default of 3)
+num_seeds_per_datapoint: 9

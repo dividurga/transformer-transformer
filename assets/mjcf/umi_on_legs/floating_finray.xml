@@ -1,0 +1,143 @@
+<mujoco model="floating_finray">
+    <compiler angle="radian" meshdir="assets" autolimits="true" />
+
+    <default>
+        <joint armature="0.243" damping="40" actuatorfrcrange="-500 500" />
+        <default class="visual">
+            <geom type="mesh" contype="0" conaffinity="0" group="2" />
+        </default>
+        <default class="arx5">
+            <joint damping="0.1" armature="0.0" frictionloss="0.05" />
+            <default class="arx5_collision">
+                <geom type="cylinder" group="3" mass="0" density="0" />
+            </default>
+            <default class="arx5_finger_collision">
+                <geom condim="4" group="3" mass="0" density="0" solimp="2 1 0.01" solref="0.01 1"
+                    friction="1 0.005 0.0001" />
+            </default>
+        </default>
+    </default>
+
+    <asset>
+        <material name="metal" rgba=".9 .95 .95 1" />
+        <material name="black" rgba="0 0 0 1" />
+        <material name="white" rgba="1 1 1 1" />
+        <material name="gray" rgba="0.671705 0.692426 0.774270 1" />
+
+        <mesh file="arx5_gripper_motor.obj" name="arx_gripper_motor" />
+        <mesh file="arx5_gripper_gear.obj" name="arx_gripper_gear" />
+        <mesh file="gopro_mount.obj" name="go_pro_mount" />
+        <mesh file="finray_mount_left.obj" name="finray_mount_left" />
+        <mesh file="finray_mount_right.obj" name="finray_mount_right" />
+        <mesh file="finray/one_piece_wide_grasp_finray_finger.obj" name="finray" />
+        <mesh file="finray/collider.obj" name="finray_collider" />
+        <mesh file="gopro/gopro.obj" name="gopro" />
+    </asset>
+
+    <worldbody>
+        <body name="base">
+            <body name="link1">
+                <geom type="sphere" size="0.001" group="5" conaffinity="0" contype="0" mass="0.001" />
+                <joint name="joint1" type="slide" axis="0 0 1" range="-10.0 10.0" />
+                <body name="link2">
+                    <geom type="sphere" size="0.001" group="5" conaffinity="0" contype="0"
+                        mass="0.001" />
+                    <joint name="joint2" type="slide" axis="0 1 0" range="-10.0 10.0" />
+                    <body name="link3">
+                        <geom type="sphere" size="0.001" group="5" conaffinity="0" contype="0"
+                            mass="0.001" />
+                        <joint name="joint3" type="slide" axis="1 0 0" range="-10.0 10.0" />
+                        <body name="link4">
+                            <geom type="sphere" size="0.001" group="5" conaffinity="0" contype="0"
+                                mass="0.001" />
+                            <joint name="joint4" type="hinge" axis="0 0 1" range="-3.1416 3.1416" />
+                            <body name="link5">
+                                <geom type="sphere" size="0.001" group="5" conaffinity="0"
+                                    contype="0"
+                                    mass="0.001" />
+                                <joint name="joint5" type="hinge" axis="1 0 0"
+                                    range="-3.1416 3.1416" />
+                                <body name="link6">
+                                    <joint name="joint6" type="hinge" axis="0 1 0"
+                                        range="-3.1416 3.1416" />
+                                    <site name="end_effector" pos="0.218 0 0"
+                                        euler="0 1.57079632679 -1.57079632679"
+                                    />
+                                    <inertial
+                                        pos="0.0471798400661976 0.000102970421835668 -0.000138510949393961"
+                                        mass="1.01"
+                                        diaginertia="0.00068 0.00036 0.00091" />
+                                    <geom type="box" size="0.01 0.09 0.008"
+                                        pos="0.06 0.00 0.00"
+                                        quat="1 0 1 0"
+                                        class="arx5_collision" />
+                                    <geom type="box" size="0.013 0.035 0.0275 "
+                                        pos="0.016 -0.02 0.085"
+                                        class="arx5_collision" />
+                                    <geom class="visual" mesh="arx_gripper_motor" />
+                                    <geom class="visual" mesh="go_pro_mount" pos="0.046 0 0" />
+                                    <geom class="visual" mesh="gopro" pos="0.012 -0.039 0.06" />
+                                    <body name="left_finger">
+                                        <joint name="left_finger_joint" axis="0 1 0"
+                                            range="0.001 0.045" type="slide" class="arx5"
+                                            armature="0.243" damping="40" />
+                                        <inertial
+                                            pos="0 0 0"
+                                            mass="0.0001"
+                                            diaginertia="0.00068 0.00036 0.00091" />
+                                        <geom class="visual" mesh="finray_mount_left"
+                                            pos="0.046 0 0" />
+                                        <geom class="visual" mesh="finray"
+                                            euler="3.14159265359 1.57079632679 0"
+                                            pos="0.067 0.002 0" rgba="1.0 0.647 0.0 1.0" />
+                                        <geom class="arx5_collision" type="mesh"
+                                            mesh="finray_collider"
+                                            euler="3.14159265359 1.57079632679 0"
+                                            pos="0.067 0.002 0" />
+
+                                    </body>
+                                    <body name="right_finger">
+                                        <joint name="right_finger_joint" axis="0 1 0"
+                                            range="-0.045 -0.001" type="slide" class="arx5"
+                                            armature="0.243" damping="40" />
+                                        <inertial
+                                            pos="0 0 0"
+                                            mass="0.0001"
+                                            diaginertia="0.00068 0.00036 0.00091" />
+                                        <geom class="visual"
+                                            mesh="finray_mount_right" pos="0.046 0 0" />
+                                        <geom class="visual" mesh="finray"
+                                            euler="0 1.57079632679 0.0"
+                                            pos="0.067 -0.002 0" rgba="1.0 0.647 0.0 1.0" />
+                                        <geom class="arx5_collision" type="mesh"
+                                            mesh="finray_collider"
+                                            euler="0 1.57079632679 0.0"
+                                            pos="0.067 -0.002 0" />
+                                    </body>
+                                    <geom class="visual" mesh="arx_gripper_gear" />
+                                </body>
+                            </body>
+                        </body>
+                    </body>
+                </body>
+            </body>
+        </body>
+
+    </worldbody>
+
+    <actuator>
+        <position name="joint1" joint="joint1" kp="4000" kv="124" ctrlrange="-10.0 10.0" />
+        <position name="joint2" joint="joint2" kp="4000" kv="124" ctrlrange="-10.0 10.0" />
+        <position name="joint3" joint="joint3" kp="4000" kv="124" ctrlrange="-10.0 10.0" />
+        <position name="joint4" joint="joint4" kp="4000" kv="124" ctrlrange="-3.1416 3.1416" />
+        <position name="joint5" joint="joint5" kp="4000" kv="124" ctrlrange="-3.1416 3.1416" />
+        <position name="joint6" joint="joint6" kp="4000" kv="124" ctrlrange="-3.1416 3.1416" />
+        <position name="left_finger_joint" joint="left_finger_joint" kp="2000" kv="124"
+            ctrlrange="0.001 0.045" />
+    </actuator>
+
+    <equality>
+        <joint name="gripper" joint1="left_finger_joint" joint2="right_finger_joint"
+            polycoef="0.0 -1.0 0 0 0" solimp=".95 .99 .0001" />
+    </equality>
+</mujoco>

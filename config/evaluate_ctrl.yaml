@@ -1,0 +1,8 @@
+defaults:
+  - inference
+  - evals/ctrl@eval_fn: quadruped
+  - diffusion_guidance: null
+  - _self_
+  - override hydra/job_logging: custom
+
+task_name: ctrl

@@ -1,0 +1,21 @@
+defaults:
+  - runner: wheeled_bimanual_mink
+  - env@runner.env: wheeled_bimanual
+  - override hydra/job_logging: custom
+  - _self_
+
+runner:
+  env:
+    pickle_path: data/bimanual_dish_washing.pkl
+
+episode_seed: 0
+num_episodes_per_hardware: 1
+
+hardware_seeds: null
+num_hardware: 1
+
+num_processes: 1
+num_gpus_per_worker: 0
+
+data_path: test_bimanual.zarr
+randomized_episode_seeds: false

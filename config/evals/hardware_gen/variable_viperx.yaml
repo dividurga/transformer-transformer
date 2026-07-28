@@ -1,0 +1,7 @@
+defaults:
+  - hardware_gen_eval
+  - /runner: mink
+  - /env@runner.env: variable_viperx
+  - _self_
+
+gravcomp: true # true for only fixed base robots

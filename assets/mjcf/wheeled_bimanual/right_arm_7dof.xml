@@ -1,0 +1,145 @@
+<mujoco model="right_arm_7dof">
+    <include file="defaults.xml" />
+
+    <worldbody>
+        <!-- Shoulder Pitch first - swings arm forward/backward -->
+        <body name="right_shoulder_pitch_link" pos="0 -0.02 0">
+            <geom name="right_shoulder_pitch_motor" class="small_motor" pos="0 0 0"
+                euler="1.5708 0 0" />
+            <joint name="right_shoulder_pitch" axis="0 1 0" class="shoulder" />
+
+            <geom name="right_shoulder_roll_link" type="box" size="0.017 0.017"
+                fromto="0 0 0 0 -0.06 -0.03" rgba="0.97 0.95 0.93 1" />
+
+            <!-- Shoulder Roll - rotates arm toward/away from body -->
+            <body name="right_shoulder_roll_link" pos="0 -0.06 -0.03">
+                <geom name="right_shoulder_roll_motor" class="small_motor" pos="0 0 0"
+                    euler="0 1.5708 0" />
+                <joint name="right_shoulder_roll" axis="1 0 0" class="shoulder" range="-2.8 0.50" />
+                <!-- Shoulder link - extends downwards, connects to shoulder roll link with 2 cm
+                offset -->
+                <geom name="right_shoulder_link" type="cylinder" size="0.025"
+                    fromto="0 0 -0.024 0 0.0 -0.06"
+                    rgba="0.97 0.95 0.93 1" />
+                <!-- Shoulder Yaw - rotates upper arm around its axis -->
+                <body name="right_shoulder_yaw_link" pos="0 0 -0.08">
+                    <geom name="right_shoulder_yaw_motor" class="small_motor" pos="0 0 0"
+                        euler="0 0 0" />
+                    <joint name="right_shoulder_yaw" axis="0 0 1" class="shoulder" />
+
+                    <!-- Upper arm - extends downward with 2 cm offset to connect to shoulder link -->
+                    <geom name="right_upper_arm" type="cylinder" size="0.025"
+                        fromto="0 0 -0.02 0 0 -0.10"
+                        rgba="0.97 0.95 0.93 1" />
+
+                    <body name="right_elbow_link" pos="0 0 -0.12">
+                        <!-- Elbow Pitch -->
+                        <geom name="right_elbow_motor" class="small_motor" pos="0 0 0"
+                            euler="1.5708 0 0" />
+                        <joint name="right_elbow_pitch" axis="0 1 0" class="elbow" />
+
+                        <!-- Forearm - extends downward -->
+                        <geom name="right_forearm" type="cylinder" size="0.02"
+                            fromto="0 0 -0.02 0 0 -0.16"
+                            rgba="0.97 0.95 0.93 1" />
+
+                        <body name="right_wrist_yaw_link" pos="0 0 -0.18">
+                            <!-- Wrist Yaw -->
+                            <geom name="right_wrist_yaw_motor" class="small_motor" size="0.02 0.015"
+                                pos="0 0 0" euler="0 0 0" />
+                            <joint name="right_wrist_yaw" axis="0 0 1" class="wrist" />
+
+                            <body name="right_wrist_pitch_link" pos="0 0 -0.03">
+                                <!-- Wrist Pitch -->
+                                <geom name="right_wrist_pitch_motor" class="small_motor"
+                                    size="0.02 0.015"
+                                    pos="0 0 0" euler="1.5708 0 0" />
+                                <joint name="right_wrist_pitch" axis="0 1 0" class="wrist" />
+
+                                <body name="right_wrist_roll_link" pos="0 0 -0.03">
+                                    <!-- Wrist Roll -->
+                                    <geom name="right_wrist_roll_motor" class="small_motor"
+                                        size="0.018 0.012"
+                                        pos="0 0 0" euler="0 0 0" />
+                                    <joint name="right_wrist_roll" axis="0 0 1" class="wrist" />
+
+                                    <!-- Gripper / End effector -->
+                                    <geom name="right_gripper_base" class="body_panel" type="box"
+                                        size="0.02 0.04 0.015" pos="0 0 -0.035" />
+
+                                    <body name="right_finger_left" pos="0 0.03 -0.045">
+                                        <geom name="right_finger_left_geom" class="gripper_finger"
+                                            type="box" size="0.015 0.008 0.04" pos="0 0 -0.02" />
+                                    </body>
+                                    <body name="right_finger_right" pos="0 -0.03 -0.045">
+                                        <geom name="right_finger_right_geom" class="gripper_finger"
+                                            type="box" size="0.015 0.008 0.04" pos="0 0 -0.02" />
+                                    </body>
+
+                                    <site name="right_end_effector" pos="0 0 -0.09"
+                                        euler="3.14159 0 1.5708"
+                                        group="1" />
+                                </body>
+                            </body>
+                        </body>
+                    </body>
+                </body>
+            </body>
+        </body>
+    </worldbody>
+
+    <keyframe>
+        <!-- Home pose: arm hanging down naturally with slight forward pitch and elbow bend -->
+        <key name="home"
+            qpos="0.4 -0.8 0.0 -2.5 0.3 0.8 -1.0"
+            ctrl="0.4 -0.8 0.0 -2.5 0.3 0.8 -1.0" />
+        <key name="penalty_default_qpos_weight" qpos="1 1 1 1 1 1 1" />
+        <key name="mink_damping_scale" qpos="1 1 1 1 1 1 1" />
+    </keyframe>
+
+    <actuator>
+        <position name="right_shoulder_pitch" joint="right_shoulder_pitch" kp="200" kv="20"
+            forcerange="-100 100" ctrlrange="-3.14159 3.14159" />
+        <position name="right_shoulder_roll" joint="right_shoulder_roll" kp="200" kv="20"
+            forcerange="-100 100" ctrlrange="-3.14159 3.14159" />
+        <position name="right_shoulder_yaw" joint="right_shoulder_yaw" kp="200" kv="20"
+            forcerange="-100 100" ctrlrange="-3.14159 3.14159" />
+        <position name="right_elbow_pitch" joint="right_elbow_pitch" kp="150" kv="15"
+            forcerange="-80 80" ctrlrange="-2.5 2.5" />
+        <position name="right_wrist_yaw" joint="right_wrist_yaw" kp="60" kv="6"
+            forcerange="-40 40" ctrlrange="-2.0 2.0" />
+        <position name="right_wrist_pitch" joint="right_wrist_pitch" kp="60" kv="6"
+            forcerange="-40 40" ctrlrange="-2.0 2.0" />
+        <position name="right_wrist_roll" joint="right_wrist_roll" kp="60" kv="6"
+            forcerange="-40 40" ctrlrange="-2.0 2.0" />
+    </actuator>
+
+    <custom>
+        <!-- Shoulder roll link offset variation -->
+        <!-- Y direction: -10 to -4cm (mirrored from left arm) -->
+        <numeric name="right_shoulder_roll_link\geom\fromto\4\range\y" size='2' data='-0.10 -0.04' />
+        <text name="right_shoulder_roll_y_offset"
+            data="right_shoulder_roll_link\geom\fromto\4\range\y;right_shoulder_roll_link\body\pos\1\range\y" />
+
+        <!-- Z direction: 3-8cm down -->
+        <numeric name="right_shoulder_roll_link\geom\fromto\5\range\y" size='2' data='-0.03 -0.08' />
+        <text name="right_shoulder_roll_z_offset"
+            data="right_shoulder_roll_link\geom\fromto\5\range\y;right_shoulder_roll_link\body\pos\2\range\y" />
+
+        <!-- Shoulder link length variation (geom extends from -0.024 to endpoint, body is 2cm
+        beyond) -->
+        <numeric name="right_shoulder_link\geom\fromto\5\range\y" size='2' data='-0.04 -0.10' />
+        <text name="right_shoulder_link_length"
+            data="right_shoulder_link\geom\fromto\5\range\y;right_shoulder_yaw_link\body\pos\2\range\y-0.02" />
+
+        <!-- Upper arm length variations -->
+        <numeric name="right_upper_arm\geom\fromto\5\range\y" size='2' data='-0.03 -0.20' />
+        <text name="right_upper_arm_length"
+            data="right_upper_arm\geom\fromto\5\range\y;right_elbow_link\body\pos\2\range\y-0.02" />
+
+        <!-- Forearm length variations -->
+        <numeric name="right_forearm\geom\fromto\5\range\y" size='2' data='-0.03 -0.20' />
+        <text name="right_forearm_length"
+            data="right_forearm\geom\fromto\5\range\y;right_wrist_yaw_link\body\pos\2\range\y-0.02" />
+    </custom>
+</mujoco>

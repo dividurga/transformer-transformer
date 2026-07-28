@@ -1,0 +1,72 @@
+defaults:
+  - inference
+  - /dataset/timestep_sampler@timestep_sampler: even
+  - _self_
+  - override hydra/job_logging: custom
+
+# === Input/Output Paths ===
+pickle_path: ???
+ckpt_path: ???
+output_cache_dir: null # null = use temp directory, or specify path for persistent cache
+
+# === Task Configuration ===
+task_name: hardware_gen
+gravcomp: true # true for only fixed-based arms
+traj_idx: 0
+center_traj: true
+max_traj_len: 2000
+
+# === Seed Configuration ===
+seed_start: 0
+seed_end: 1 # exclusive, iterates range(seed_start, seed_end)
+
+# === Hardware Optimizer - Override to use visualization subclass ===
+hardware_optimizer:
+  _target_: scripts.visualize_robotoken_diffusion.VisualizationHardwareOptimizer
+  _partial_: true
+  num_seeds: 1
+  batch_size: 1
+  output_cache_dir: ${output_cache_dir}
+
+# === Rendering Settings ===
+render: true
+render_height: 1080
+render_width: 1920
+video_fps: 18
+text_fontsize: 50
+text_positions:
+  - [10, 10] # diffusion timestep label position
+  - [10, 60] # episode timestep label position
+
+# === Progress Bar ===
+use_pbar: false
+
+# === Visualization Settings ===
+colormap_name: 'jet' # colormap for distance visualization
+max_distance: 2.0 # max distance for colormap normalization
+use_original_rgba: true # use original model colors vs distance-based coloring
+
+# === Frame Hold Settings ===
+last_diffusion_step_frame_repeat: 5 # repeat frames for last diffusion step
+final_frame_hold_count: 10 # hold final frame at end of video
+
+# === Override Keys ===
+# Keys to copy from final robot dict to intermediate dicts during post-processing.
+# These are typically discrete/categorical values that shouldn't be interpolated.
+override_keys:
+  - 'link/diaginertia'
+  - 'dyna_joint/link/id'
+  - 'fixed_joint/link/id'
+  - 'link/track_link/id'
+  - 'link/free_link/id'
+  - 'actuator/dyna_joint/id'
+  - 'dyna_joint/type'
+  - 'link/contact_dim'
+  - 'link/mass'
+  - 'actuator/ctrl_range'
+  - 'actuator/force_range'
+  - 'actuator/kp'
+  - 'actuator/kv'
+  - 'actuator/gear_ratio'
+  - 'actuator/type'
+  - 'dyna_joint/range'

@@ -1,0 +1,17 @@
+defaults:
+  - link
+  - _self_
+attr_encoders:
+  diaginertia:
+    _target_: t2.model.encoding.LogEncoding
+    offset: 0.0001
+  mass:
+    _target_: t2.model.encoding.LogEncoding
+    offset: 0.0001
+attr_decoders:
+  diaginertia:
+    _target_: t2.model.encoding.LogDecoding
+    offset: 0.0001
+  mass:
+    _target_: t2.model.encoding.LogDecoding
+    offset: 0.0001

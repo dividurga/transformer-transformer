@@ -1,0 +1,58 @@
+defaults:
+  - zeroth_order
+  - _self_
+  # `null` leaves guidance mirroring the optimizer's reward_fns (see below).
+  # Select a reward here to give guidance its OWN coefficients. This entry has
+  # to stay AFTER `_self_`: listed before it, `_self_`'s interpolation merges
+  # last and silently discards the selection.
+  - /reward_fns@guidance.reward_fns: null
+
+_target_: t2.eval.diffusion_guidance.ObjectiveGuidedDiffusionOptimizer
+guidance:
+  _target_: t2.eval.diffusion_guidance.ObjectiveGuidedDiffusion
+  # By default guide with the same rewards the optimizer ranks by, so a single
+  # `reward_fns@eval_fn.hardware_optimizer_fn.reward_fns=<name>` override keeps
+  # guidance and scoring in sync. `diffusion_guidance.py` asserts the two reward
+  # *key sets* match; it does not compare coefficients.
+  #
+  # Mirroring is what the paper's runs did everywhere except the four ViperX
+  # tracking_size / tracking_weight cells, where guidance deliberately used a
+  # weaker embodiment term than the reward being reported:
+  #
+  #   minimize_size.weight     0.1 reported -> 0.005 for guidance
+  #   minimize_weight.weight  10   reported -> 0.005 for guidance
+  #
+  # Rewards over embodiment tokens produce much larger gradients than rewards
+  # over dynamics tokens, and guiding at the reported coefficient drives the
+  # link tokens off the training manifold until designs stop detokenizing. To
+  # reproduce those cells, select the guidance reward explicitly and reweight it:
+  #
+  #   reward_fns@eval_fn.hardware_optimizer_fn.guidance.reward_fns=tracking_size \
+  #   eval_fn.hardware_optimizer_fn.guidance.reward_fns.minimize_size.weight=0.005
+  reward_fns: ${..reward_fns}
+  guidance_terms:
+    - dyna_joint
+    - fixed_joint
+    - link
+    - actuator
+  clip_nan: true
+  # Guidance strength, tuned per design space and per protocol: it multiplies
+  # reward gradients whose magnitude depends on the reward scale and the token
+  # parameterization, so one value does not transfer. Too small and guidance is
+  # inert (the optimizer degenerates into plain zeroth-order ranking).
+  #
+  # The values behind the paper's figure, with the sampler settings each cell
+  # was run at:
+  #
+  #   viperx    single-trajectory     50.0  (this default)  eta 1.0  clip false
+  #   viperx    multi-trajectory     500.0                  eta 0.9  clip false
+  #   quadruped single-trajectory    100.0                  eta 1.0  clip true
+  #   bimanual  either protocol        0.2                  eta 1.0  clip true
+  #
+  # ("clip" is the top-level `clip_samples_in_guidance`.) The full per-panel
+  # table, including the guidance-only reward coefficients above, is in
+  # docs/visualization.md.
+  #
+  # Override for anything but ViperX single-trajectory, e.g.
+  #   eval_fn.hardware_optimizer_fn.guidance.scale=0.2
+  scale: 50.0

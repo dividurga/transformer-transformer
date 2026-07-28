@@ -1,0 +1,41 @@
+defaults:
+  - ctrl_eval
+  - /env@runner.env: umi_on_legs
+  - _self_
+
+runner:
+  env:
+    pickle_path: ???
+
+hardware_traj_pairs_generator:
+  _partial_: true
+  _target_: t2.eval.ctrl.cross_product
+  list1:
+    # make sure this is matching with
+    # run_rl_ctrl_eval.sh hardware_seeds
+    - 10000000
+    - 10000001
+    - 10000002
+    - 10000003
+    - 10000004
+  list2:
+    - 0
+    - 1
+    - 2
+    - 3
+    - 4
+    - 5
+    - 6
+    - 7
+    - 8
+    - 9
+    - 10
+    - 11
+    - 12
+    - 13
+    - 14
+    - 15
+    - 16
+    - 17
+    - 18
+    - 19

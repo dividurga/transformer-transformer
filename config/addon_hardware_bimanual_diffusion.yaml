@@ -1,0 +1,15 @@
+defaults:
+  - addon_hardware_bimanual
+  - model/tasks@model.tasks.hardware_gen: hardware_gen
+  # - model/tasks@model.tasks.hardware_gen: unconditional_hardware_gen_no_free_base
+  # Log encoding for attributes that span multiple orders of magnitude.
+  # This is critical for the diffusion model to learn properly.
+  # Link: mass and diaginertia span many orders of magnitude
+  - override model/tasks/adapter@model.tasks.hardware_gen.adapters.link: link_log_diffuse
+  # DynaJoint: armature (0.02-10), damping (1-200), stiffness, frictionloss
+  # stiffness/frictionloss use SignedLogEncoding to handle zeros (dim 1->2 each)
+  - override model/tasks/adapter@model.tasks.hardware_gen.adapters.dyna_joint: dyna_joint_log_diffuse
+  # Actuator: kp (60-20000), kv (6-5000), force_range (40-5000)
+  # force_range uses SignedLogEncoding to handle negative values (dim 2->4)
+  - override model/tasks/adapter@model.tasks.hardware_gen.adapters.actuator: actuator_log_diffuse
+  - _self_

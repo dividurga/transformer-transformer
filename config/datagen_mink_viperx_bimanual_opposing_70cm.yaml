@@ -1,0 +1,24 @@
+defaults:
+  - runner: bimanual_mink
+  - env@runner.env: viperx_bimanual_opposing_70cm
+  - override hydra/job_logging: custom
+  - _self_
+
+runner:
+  env:
+    pickle_path: ???
+  render: false
+  render_fps: 30
+  log_dir: renders
+
+episode_seed: 0
+num_episodes_per_hardware: 6
+
+hardware_seeds: [0]
+num_hardware: 1
+
+num_processes: 1
+num_gpus_per_worker: 0
+
+data_path: ???
+randomized_episode_seeds: false

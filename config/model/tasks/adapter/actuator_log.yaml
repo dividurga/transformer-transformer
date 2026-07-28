@@ -1,0 +1,27 @@
+defaults:
+  - actuator
+  - _self_
+modality:
+  attrs:
+    # force_range doubles from 2 to 4 due to signed log encoding
+    force_range: 4
+attr_encoders:
+  kp:
+    _target_: t2.model.encoding.LogEncoding
+    offset: 0.001
+  kv:
+    _target_: t2.model.encoding.LogEncoding
+    offset: 0.001
+  force_range:
+    _target_: t2.model.encoding.SignedLogEncoding
+    offset: 0.01
+attr_decoders:
+  kp:
+    _target_: t2.model.encoding.LogDecoding
+    offset: 0.001
+  kv:
+    _target_: t2.model.encoding.LogDecoding
+    offset: 0.001
+  force_range:
+    _target_: t2.model.encoding.SignedLogDecoding
+    offset: 0.01

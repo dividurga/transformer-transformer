@@ -1,0 +1,31 @@
+defaults:
+  - dyna_joint
+  - _self_
+# Log encoding for dynamic joint attributes that span multiple orders of magnitude.
+
+attr_encoders:
+  armature:
+    _target_: t2.model.encoding.LogEncoding
+    offset: 0.001
+  damping:
+    _target_: t2.model.encoding.LogEncoding
+    offset: 0.001
+  stiffness:
+    _target_: t2.model.encoding.LogEncoding
+    offset: 0.001
+  frictionloss:
+    _target_: t2.model.encoding.LogEncoding
+    offset: 0.001
+attr_decoders:
+  armature:
+    _target_: t2.model.encoding.LogDecoding
+    offset: 0.001
+  damping:
+    _target_: t2.model.encoding.LogDecoding
+    offset: 0.001
+  stiffness:
+    _target_: t2.model.encoding.LogDecoding
+    offset: 0.001
+  frictionloss:
+    _target_: t2.model.encoding.LogDecoding
+    offset: 0.001
