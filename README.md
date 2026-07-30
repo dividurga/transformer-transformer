@@ -5,7 +5,7 @@
 
 $^1$ Stanford University, $^2$ Columbia University
 
-[Project Page](https://transformer-transformer.github.io) | [Paper](https://transformer-transformer.github.io/static/paper.pdf) | [Video](https://youtu.be/TTyjvPVFbNw)
+[Project Page](https://transformer-transformer.github.io) | [Paper](https://arxiv.org/abs/2607.25798) | [Video](https://youtu.be/TTyjvPVFbNw)
 
 <div style="margin:50px; text-align: justify;">
 <img style="width:100%;" src="docs/assets/looping_robotokens.gif">
@@ -51,6 +51,19 @@ If you just want to start running some commands while skimming the paper, you sh
 - 📽️ [Visualizations](docs/visualization.md)
   - 🎬 [Robot Rollouts](docs/visualization.md#robot-rollouts)
   - 🌪️ [Diffusion Processes](docs/visualization.md#diffusion-processes)
+
+# Citation
+
+If you find this work useful, please consider citing:
+
+```bibtex
+@article{ha2026transformer,
+  title={Transformer Transformer: A Unified Model for Motion-Conditioned Robot Co-design},
+  author={Ha, Huy and Liu, C. Karen and Song, Shuran},
+  journal={arXiv preprint arXiv:2607.25798},
+  year={2026}
+}
+```
 
 # Code Acknowledgements
 

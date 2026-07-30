@@ -1,0 +1,31 @@
+cff-version: 1.2.0
+message: "If you use this software or find our work useful, please cite it as below."
+title: "Transformer Transformer: A Unified Model for Motion-Conditioned Robot Co-design"
+authors:
+  - family-names: "Ha"
+    given-names: "Huy"
+  - family-names: "Liu"
+    given-names: "C. Karen"
+  - family-names: "Song"
+    given-names: "Shuran"
+year: 2026
+identifiers:
+  - type: other
+    value: "arXiv:2607.25798"
+    description: "The arXiv preprint"
+url: "https://transformer-transformer.github.io"
+repository-code: "https://github.com/real-stanford/transformer-transformer"
+license: MIT
+preferred-citation:
+  type: article
+  title: "Transformer Transformer: A Unified Model for Motion-Conditioned Robot Co-design"
+  authors:
+    - family-names: "Ha"
+      given-names: "Huy"
+    - family-names: "Liu"
+      given-names: "C. Karen"
+    - family-names: "Song"
+      given-names: "Shuran"
+  year: 2026
+  journal: "arXiv preprint arXiv:2607.25798"
+  url: "https://arxiv.org/abs/2607.25798"
